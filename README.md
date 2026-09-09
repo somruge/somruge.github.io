@@ -1,8 +1,8 @@
-# rugesomanath.github.io
+# somruge.github.io
 
 Personal website, deployed via GitHub Pages.
 
-Live at: https://rugesomanath.github.io
+Live at: https://somruge.github.io
 
 ## Editing
 
