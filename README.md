@@ -4,15 +4,20 @@ Personal website, deployed via GitHub Pages.
 
 Live at: https://somruge.github.io
 
-## Editing
+## Files
 
 - `index.html` — content and structure
 - `style.css` — styling (light/dark mode via `prefers-color-scheme`)
-- `script.js` — small bits of behavior
+- `script.js` — nav menu, scroll-reveal, active-link highlighting
+- `game.js` — the "Sprint Dash" balloon-pop mini-game
+- `favicon.svg`, `og-image.png` — brand mark and social preview image
 
-Placeholders to replace before sharing widely:
-- Email address (`your.email@example.com`) in `index.html`
-- LinkedIn URL (`linkedin.com/in/your-profile`)
-- About / Experience / Projects copy
+No build step — just edit the files and push to `main`. GitHub Pages redeploys automatically
+(usually within a minute or two).
 
-No build step — just edit the files and push to `main`. GitHub Pages redeploys automatically.
+## Cache-busting
+
+`style.css`, `script.js`, and `game.js` are linked with a `?v=N` query string in `index.html`.
+Browsers cache these files for up to 10 minutes, so **bump the version number** (e.g. `?v=3` →
+`?v=4`) any time you change one of them — otherwise visitors may keep seeing the old cached
+version for a while after you push.
