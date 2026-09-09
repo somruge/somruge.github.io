@@ -8,25 +8,28 @@
   const scoreEl = document.getElementById("gameScore");
   const resultEl = document.getElementById("gameResult");
 
-  const FIBONACCI = [1, 2, 3, 5, 8, 13];
   const ROUND_SECONDS = 10;
-  const SPAWN_MS = 550;
-  const BUBBLE_TTL_MS = 1100;
-  const BUBBLE_RADIUS = 22;
-  const BLOCKER_CHANCE = 0.18;
+  const SPAWN_MS = 480;
+  const RISE_SPEED = 0.075; // px/ms
+  const WOBBLE_AMPLITUDE = 9;
+  const WOBBLE_PERIOD = 900; // ms
+  const POP_ANIM_MS = 200;
+  const GOLDEN_CHANCE = 0.1;
+  const BLOCKER_CHANCE = 0.16;
 
-  const styles = getComputedStyle(document.documentElement);
-  const colorAccent = styles.getPropertyValue("--accent").trim() || "#1f8a70";
-  const colorAccentText = styles.getPropertyValue("--accent-text").trim() || "#ffffff";
-  const colorBlocker = "#d94f4f";
+  const NORMAL_COLORS = ["#1F8A70", "#E2725B", "#4F86C6", "#8E5572", "#4CAA5C"];
+  const GOLDEN_COLOR = "#F2B705";
+  const BLOCKER_COLOR = "#3A3F44";
 
-  let bubbles = [];
+  let balloons = [];
   let score = 0;
   let timeLeft = ROUND_SECONDS;
   let playing = false;
   let rafId = null;
   let spawnTimer = null;
   let countdownTimer = null;
+  let lastFrame = 0;
+  let canvasSize = { width: 0, height: 0 };
 
   function sizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
@@ -37,41 +40,123 @@
     return { width: rect.width, height: rect.height };
   }
 
-  let canvasSize = sizeCanvas();
+  canvasSize = sizeCanvas();
   window.addEventListener("resize", () => {
     if (!playing) canvasSize = sizeCanvas();
   });
 
-  function spawnBubble() {
-    const isBlocker = Math.random() < BLOCKER_CHANCE;
-    const value = isBlocker ? 0 : FIBONACCI[Math.floor(Math.random() * FIBONACCI.length)];
-    const x = BUBBLE_RADIUS + Math.random() * (canvasSize.width - BUBBLE_RADIUS * 2);
-    const y = BUBBLE_RADIUS + Math.random() * (canvasSize.height - BUBBLE_RADIUS * 2);
-    bubbles.push({ x, y, r: BUBBLE_RADIUS, value, isBlocker, born: performance.now() });
+  function spawnBalloon() {
+    const roll = Math.random();
+    const isGolden = roll < GOLDEN_CHANCE;
+    const isBlocker = !isGolden && roll < GOLDEN_CHANCE + BLOCKER_CHANCE;
+    const r = 16 + Math.random() * 10;
+    const baseX = r + Math.random() * (canvasSize.width - r * 2);
+    balloons.push({
+      baseX,
+      x: baseX,
+      y: canvasSize.height + r,
+      r,
+      color: isGolden ? GOLDEN_COLOR : isBlocker ? BLOCKER_COLOR : NORMAL_COLORS[Math.floor(Math.random() * NORMAL_COLORS.length)],
+      isGolden,
+      isBlocker,
+      born: performance.now(),
+      phase: Math.random() * Math.PI * 2,
+      popping: false,
+      popStart: 0,
+    });
   }
 
-  function draw() {
-    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
-    const now = performance.now();
+  function drawBalloon(b, now) {
+    const { x, y, r, color } = b;
 
-    bubbles = bubbles.filter((b) => now - b.born < BUBBLE_TTL_MS);
+    ctx.save();
+    ctx.strokeStyle = "rgba(0,0,0,0.15)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x, y + r);
+    ctx.quadraticCurveTo(x - 5, y + r + 10, x, y + r + 18);
+    ctx.stroke();
 
-    bubbles.forEach((b) => {
-      const age = (now - b.born) / BUBBLE_TTL_MS;
-      ctx.globalAlpha = 1 - age * 0.35;
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-      ctx.fillStyle = b.isBlocker ? colorBlocker : colorAccent;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = colorAccentText;
-      ctx.font = "700 15px Manrope, sans-serif";
+    ctx.beginPath();
+    ctx.ellipse(x, y, r * 0.82, r, 0, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(x - r * 0.28, y - r * 0.4);
+    ctx.quadraticCurveTo(x - r * 0.28, y - r * 0.75, x, y - r * 0.75);
+    ctx.strokeStyle = "rgba(255,255,255,0.55)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x - 4, y + r);
+    ctx.lineTo(x + 4, y + r);
+    ctx.lineTo(x, y + r + 7);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    if (b.isGolden) {
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "700 13px Manrope, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(b.isBlocker ? "✕" : String(b.value), b.x, b.y + 1);
+      ctx.fillText("★", x, y);
+    } else if (b.isBlocker) {
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2.5;
+      const s = r * 0.32;
+      ctx.beginPath();
+      ctx.moveTo(x - s, y - s);
+      ctx.lineTo(x + s, y + s);
+      ctx.moveTo(x + s, y - s);
+      ctx.lineTo(x - s, y + s);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawPop(b, now) {
+    const t = (now - b.popStart) / POP_ANIM_MS;
+    const radius = b.r * (1 + t * 0.9);
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - t);
+    ctx.strokeStyle = b.color;
+    ctx.lineWidth = 3;
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(b.x + Math.cos(angle) * radius * 0.4, b.y + Math.sin(angle) * radius * 0.4);
+      ctx.lineTo(b.x + Math.cos(angle) * radius, b.y + Math.sin(angle) * radius);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function tick(now) {
+    if (!lastFrame) lastFrame = now;
+    const dt = now - lastFrame;
+    lastFrame = now;
+
+    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+
+    balloons = balloons.filter((b) => {
+      if (b.popping) return now - b.popStart < POP_ANIM_MS;
+      return b.y + b.r > -20;
     });
 
-    if (playing) rafId = requestAnimationFrame(draw);
+    balloons.forEach((b) => {
+      if (b.popping) {
+        drawPop(b, now);
+        return;
+      }
+      b.y -= RISE_SPEED * dt;
+      b.x = b.baseX + Math.sin((now - b.born) / WOBBLE_PERIOD + b.phase) * WOBBLE_AMPLITUDE;
+      drawBalloon(b, now);
+    });
+
+    if (playing) rafId = requestAnimationFrame(tick);
   }
 
   function handleClick(evt) {
@@ -81,29 +166,36 @@
     const x = point.clientX - rect.left;
     const y = point.clientY - rect.top;
 
-    for (let i = bubbles.length - 1; i >= 0; i--) {
-      const b = bubbles[i];
+    for (let i = balloons.length - 1; i >= 0; i--) {
+      const b = balloons[i];
+      if (b.popping) continue;
       const dx = x - b.x;
       const dy = y - b.y;
-      if (Math.sqrt(dx * dx + dy * dy) <= b.r) {
-        score = b.isBlocker ? Math.max(0, score - 2) : score + b.value;
+      if (Math.sqrt(dx * dx + dy * dy) <= b.r + 4) {
+        const delta = b.isBlocker ? -2 : b.isGolden ? 5 : 1;
+        score = Math.max(0, score + delta);
         scoreEl.textContent = String(score);
-        bubbles.splice(i, 1);
+        b.popping = true;
+        b.popStart = performance.now();
         break;
       }
     }
   }
 
   canvas.addEventListener("click", handleClick);
-  canvas.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    handleClick(e);
-  }, { passive: false });
+  canvas.addEventListener(
+    "touchstart",
+    (e) => {
+      e.preventDefault();
+      handleClick(e);
+    },
+    { passive: false }
+  );
 
   function resultMessage(finalScore) {
-    if (finalScore >= 40) return "🚀 Ship it — elite velocity!";
-    if (finalScore >= 25) return "💪 Solid sprint. Team's proud of you.";
-    if (finalScore >= 10) return "🙂 Decent sprint, a few blockers got you.";
+    if (finalScore >= 30) return "🚀 Ship it — elite velocity!";
+    if (finalScore >= 18) return "💪 Solid sprint. Team's proud of you.";
+    if (finalScore >= 8) return "🙂 Decent sprint, a few blockers got you.";
     return "🔁 Retro time — let's improve next sprint.";
   }
 
@@ -112,7 +204,8 @@
     clearInterval(spawnTimer);
     clearInterval(countdownTimer);
     if (rafId) cancelAnimationFrame(rafId);
-    bubbles = [];
+    balloons = [];
+    lastFrame = 0;
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
     resultEl.textContent = `Sprint Velocity: ${score} pts — ${resultMessage(score)}`;
     playBtn.textContent = "Play Again";
@@ -123,21 +216,22 @@
     canvasSize = sizeCanvas();
     score = 0;
     timeLeft = ROUND_SECONDS;
-    bubbles = [];
+    balloons = [];
     playing = true;
+    lastFrame = 0;
     scoreEl.textContent = "0";
     timeEl.textContent = String(timeLeft);
     resultEl.textContent = "";
     playBtn.disabled = true;
 
-    spawnTimer = setInterval(spawnBubble, SPAWN_MS);
+    spawnTimer = setInterval(spawnBalloon, SPAWN_MS);
     countdownTimer = setInterval(() => {
       timeLeft -= 1;
       timeEl.textContent = String(Math.max(0, timeLeft));
       if (timeLeft <= 0) endRound();
     }, 1000);
 
-    rafId = requestAnimationFrame(draw);
+    rafId = requestAnimationFrame(tick);
   }
 
   playBtn.addEventListener("click", startRound);
