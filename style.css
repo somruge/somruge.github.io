@@ -384,6 +384,53 @@ main {
   font-weight: 500;
 }
 
+.playground-intro {
+  color: var(--text-muted);
+  max-width: 620px;
+  margin: 0 0 1.2rem;
+}
+
+.game-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+}
+
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.game-canvas {
+  width: 100%;
+  height: 220px;
+  display: block;
+  border-radius: 10px;
+  background: var(--bg);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.game-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.game-result {
+  margin: 0;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
 .contact {
   text-align: left;
 }

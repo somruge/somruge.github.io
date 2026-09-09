@@ -45,6 +45,7 @@
       <a href="#focus">Focus</a>
       <a href="#experience">Experience</a>
       <a href="#impact">Impact</a>
+      <a href="#playground">Play</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -195,6 +196,25 @@
     </div>
   </section>
 
+  <section id="playground" class="section reveal">
+    <h2>Quick Break</h2>
+    <p class="playground-intro">
+      Story points, real fast. Click as many as you can in 10 seconds — dodge the blockers.
+    </p>
+    <div class="game-card">
+      <div class="game-hud">
+        <span>⏱ <span id="gameTime">10</span>s</span>
+        <span>⭐ <span id="gameScore">0</span> pts</span>
+      </div>
+      <canvas id="gameCanvas" class="game-canvas" aria-label="Sprint Dash mini-game"></canvas>
+      <div class="game-footer">
+        <button id="gamePlayBtn" class="btn btn-primary" type="button">Play Sprint Dash</button>
+        <p id="gameResult" class="game-result" aria-live="polite"></p>
+      </div>
+    </div>
+    <noscript><p class="playground-intro">Enable JavaScript to play Sprint Dash.</p></noscript>
+  </section>
+
   <section id="contact" class="section contact reveal">
     <h2>Get in Touch</h2>
     <p>Open to conversations on program delivery, Agile transformation, and applied AI.</p>
@@ -211,6 +231,7 @@
 </footer>
 
 <script src="script.js"></script>
+<script src="game.js"></script>
 <script data-goatcounter="https://somruge.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
