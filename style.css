@@ -247,13 +247,13 @@ main {
   letter-spacing: -0.01em;
 }
 
-.reveal {
+.reveal.reveal-armed {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.reveal.visible {
+.reveal.reveal-armed.visible {
   opacity: 1;
   transform: none;
 }

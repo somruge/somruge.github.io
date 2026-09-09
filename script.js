@@ -18,9 +18,7 @@ navLinks.querySelectorAll("a").forEach((link) => {
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const revealTargets = document.querySelectorAll(".reveal");
-if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-  revealTargets.forEach((el) => el.classList.add("visible"));
-} else {
+if (!prefersReducedMotion && "IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -32,7 +30,10 @@ if (prefersReducedMotion || !("IntersectionObserver" in window)) {
     },
     { threshold: 0.12 }
   );
-  revealTargets.forEach((el) => revealObserver.observe(el));
+  revealTargets.forEach((el) => {
+    el.classList.add("reveal-armed");
+    revealObserver.observe(el);
+  });
 }
 
 const sections = document.querySelectorAll("main section[id]");
