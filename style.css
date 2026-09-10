@@ -290,6 +290,13 @@ main {
   font-size: 0.95rem;
 }
 
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
 .timeline {
   display: flex;
   flex-direction: column;
