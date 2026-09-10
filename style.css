@@ -128,11 +128,28 @@ a:focus-visible, button:focus-visible {
 }
 
 .nav-links a {
+  position: relative;
   text-decoration: none;
   color: var(--text-muted);
   font-size: 0.92rem;
   padding-bottom: 2px;
   border-bottom: 2px solid transparent;
+}
+
+.nav-badge {
+  position: absolute;
+  top: -1px;
+  right: -9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: nav-badge-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes nav-badge-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.8); opacity: 0.35; }
 }
 
 .nav-links a:hover { color: var(--text); }
@@ -480,6 +497,10 @@ main {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .nav-badge {
+    animation: none;
   }
 
   .btn:hover { transform: none; }
