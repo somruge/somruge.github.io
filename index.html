@@ -19,7 +19,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="preload" as="style" id="fontsPreload" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Source+Sans+3:wght@400;600&display=optional">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Source+Sans+3:wght@400;600&display=optional"></noscript>
 <link rel="stylesheet" href="style.css?v=5">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
@@ -38,7 +39,7 @@
       </svg>
       Som Ruge
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
       <span></span><span></span><span></span>
     </button>
     <nav class="nav-links" id="navLinks">
@@ -235,7 +236,7 @@
         <span>⏱ <span id="gameTime">10</span>s</span>
         <span>⭐ <span id="gameScore">0</span> pts</span>
       </div>
-      <canvas id="gameCanvas" class="game-canvas" aria-label="Sprint Dash balloon-pop mini-game"></canvas>
+      <canvas id="gameCanvas" class="game-canvas" role="img" aria-label="Sprint Dash balloon-pop mini-game"></canvas>
       <div class="game-footer">
         <button id="gamePlayBtn" class="btn btn-primary" type="button">Play Sprint Dash</button>
         <p id="gameResult" class="game-result" aria-live="polite"></p>

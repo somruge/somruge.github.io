@@ -1,5 +1,10 @@
 document.getElementById("year").textContent = new Date().getFullYear();
 
+const fontsPreload = document.getElementById("fontsPreload");
+fontsPreload.addEventListener("load", () => {
+  fontsPreload.rel = "stylesheet";
+});
+
 const navToggle = document.getElementById("navToggle");
 const navLinks = document.getElementById("navLinks");
 
