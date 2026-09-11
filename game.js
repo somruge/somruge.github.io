@@ -193,10 +193,10 @@
   );
 
   function resultMessage(finalScore) {
-    if (finalScore >= 30) return "🚀 Ship it — elite velocity!";
-    if (finalScore >= 18) return "💪 Solid sprint. Team's proud of you.";
-    if (finalScore >= 8) return "🙂 Decent sprint, a few blockers got you.";
-    return "🔁 Retro time — let's improve next sprint.";
+    if (finalScore >= 30) return "🎈 Balloon-popping legend!";
+    if (finalScore >= 18) return "🎉 Great pop streak!";
+    if (finalScore >= 8) return "🙂 Decent popping, a few blockers slowed you down.";
+    return "🔁 Give it another go!";
   }
 
   function endRound() {
@@ -207,7 +207,7 @@
     balloons = [];
     lastFrame = 0;
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
-    resultEl.textContent = `Sprint Velocity: ${score} pts — ${resultMessage(score)}`;
+    resultEl.textContent = `Score: ${score} pts — ${resultMessage(score)}`;
     playBtn.textContent = "Play Again";
     playBtn.disabled = false;
   }
