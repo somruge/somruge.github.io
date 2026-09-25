@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' gc.zgo.at; connect-src 'self' somruge.goatcounter.com; img-src 'self' data: somruge.goatcounter.com; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<title>Credits &amp; privacy — Som Ruge</title>
+<meta name="description" content="Credits, licences, and the privacy note for somruge.github.io, including how the AI assistant handles questions.">
+<link rel="canonical" href="https://somruge.github.io/credits.html">
+<link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/source-sans-3-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css?v=1259193f4f">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<script src="assets/js/theme.js?v=26881427f5"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="./" class="nav-brand">
+      <picture>
+        <source srcset="assets/brand/turtle-still.webp" media="(prefers-reduced-motion: reduce)">
+        <img src="assets/brand/turtle.webp" width="40" height="32" alt="" fetchpriority="low" decoding="async">
+      </picture>
+      Som Ruge
+    </a>
+    <a class="text-link" href="./">← Back to the site</a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="prose section">
+    <h1 class="section-head">Credits &amp; privacy</h1>
+
+    <h2 id="ai">The AI assistant</h2>
+    <p>
+      The "Ask about my work" assistant answers with an AI model (gpt-oss-20b, served by
+      Cloudflare Workers AI) using only the text of this site. It can be wrong: the page itself is
+      the source of truth. Each visitor can ask 10 questions a day.
+    </p>
+
+    <h2 id="privacy">Privacy</h2>
+    <ul>
+      <li><strong>Visits</strong> are counted with <a href="https://www.goatcounter.com/">GoatCounter</a>, which doesn't use cookies. It records the page, the referring site, browser, screen size, and country.</li>
+      <li><strong>Assistant questions</strong> are sent to Cloudflare Workers AI to be answered and are not stored by this site. <a href="https://developers.cloudflare.com/workers-ai/platform/privacy/">According to Cloudflare</a>, they aren't used to train models or improve its services. Please don't type personal information into the assistant.</li>
+      <li><strong>Bot check:</strong> before your first question, <a href="https://www.cloudflare.com/turnstile-privacy-policy/">Cloudflare Turnstile</a> checks that you're human.</li>
+      <li><strong>Daily question limit:</strong> counted with a scrambled form of your IP address, deleted within 24 hours.</li>
+      <li><strong>Your preferences</strong> (light/dark mode, your Balloon Pop best score) stay in your own browser.</li>
+      <li>This site sets no cookies and loads no fonts or scripts from Google.</li>
+      <li>Questions? Email <a href="mailto:ruge.somanath@gmail.com">ruge.somanath@gmail.com</a>.</li>
+    </ul>
+
+    <h2 id="licences">Credits &amp; licences</h2>
+    <ul>
+      <li><strong>Turtle logo:</strong> made by Som with Meta AI, then cut out with a background-removal tool run locally.</li>
+      <li><strong>Fonts:</strong> <a href="https://github.com/googlefonts/manrope">Manrope</a> and <a href="https://github.com/adobe-fonts/source-sans">Source Sans 3</a>, both under the SIL Open Font License 1.1 (<a href="assets/fonts/OFL-Manrope.txt">Manrope licence</a>, <a href="assets/fonts/OFL-SourceSans3.txt">Source Sans 3 licence</a>).</li>
+      <li><strong>AI model:</strong> <a href="https://huggingface.co/openai/gpt-oss-20b">gpt-oss-20b</a> by OpenAI, Apache 2.0, served by Cloudflare Workers AI.</li>
+      <li><strong>Icons, Balloon Pop, and site code:</strong> made for this site.</li>
+    </ul>
+
+    <p class="placeholder" data-placeholder="footer-disclaimer">[Optional: "Views and figures are my own, not my employers'." Owner to decide.]</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>&copy; <span id="year">2026</span> Som Ruge</p>
+  <p><a href="./">Home</a></p>
+</footer>
+
+<script data-goatcounter="https://somruge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
