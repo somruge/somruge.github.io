@@ -28,6 +28,20 @@ npm run test:e2e   # Playwright + axe, one worker
 There's no bundler: GitHub Pages serves the repository as-is. `npm run build` replaces the old
 hand-bumped `?v=N` cache-busting.
 
+## The assistant Worker (`worker/`)
+
+A Cloudflare Worker serving `/ask` and `/status` for the "Ask about my work" section (spec 22 §3).
+It answers only from `worker/profile.md`, which `npm run build` exports from `index.html`
+(placeholder content is left out). No AI key: Workers AI is reached through its binding.
+
+```bash
+cp worker/.dev.vars.example worker/.dev.vars   # once; Turnstile test keys
+npm run worker:dev    # http://localhost:8787 (real Workers AI, local limiter)
+npm test              # Worker unit tests (Vitest, fake bindings)
+npm run typecheck
+npm run eval          # 20 eval questions against the real model; must pass before any deploy
+```
+
 Placeholder content awaiting the owner is marked with `data-placeholder` (and shown with a dashed
 outline). The site must have none before it goes public.
 

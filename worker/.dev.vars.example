@@ -1,0 +1,5 @@
+# Copy to .dev.vars for local dev. These are Cloudflare's always-pass Turnstile test keys.
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+IP_HASH_KEY=local-dev-only
+ALLOWED_ORIGINS=http://localhost:8080
+DAILY_LIMIT=1000
