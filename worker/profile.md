@@ -6,7 +6,7 @@ Som Ruge
 Product Management and AI / Digital Transformation Leader
 Durham, NC · 20+ years
 I turn strategy into delivered outcomes for global teams across the US, India, Australia, and Thailand, and I'm now applying AI to how teams plan, decide, and ship.
-Get in touch LinkedIn
+Get in touch Résumé (PDF) LinkedIn
 Or ask my AI assistant →
 
 ## outcomes
@@ -23,7 +23,7 @@ Program Manager / Sr. Scrum Master / RTE · FEI Systems · 2017–2022 Team pred
 Context
 Problem
 What I did
-- Led the enterprise Agile transformation, implementing SAFe across 10+ teams ( people).
+- Led the enterprise Agile transformation, implementing SAFe across 10+ teams (~60 people).
 - Ran the Agile Release Train.
 - Coached teams and introduced delivery tracking.
 Outcome
@@ -36,7 +36,7 @@ Director, Program Management · Fidelity Investments · 2022–2026 Time-to-mark
 Context
 Problem
 What I did
-- Directed delivery across .
+- Directed delivery across 8+ cross-functional teams (40+ people).
 - Partnered with senior leadership on executing the strategic roadmap.
 - Established governance frameworks.
 Outcome

@@ -23,6 +23,15 @@ for (const viewport of [
   });
 }
 
+test("the Résumé button downloads a real PDF", async ({ page, request }) => {
+  await page.goto("/");
+  const href = await page.getByRole("link", { name: /Résumé/ }).getAttribute("href");
+  const res = await request.get(`/${href}`);
+  expect(res.status()).toBe(200);
+  expect(res.headers()["content-type"]).toBe("application/pdf");
+  expect((await res.body()).subarray(0, 5).toString()).toBe("%PDF-");
+});
+
 test("AC-03: case studies open and close by keyboard and by click", async ({ page }) => {
   await page.goto("/");
   const first = page.locator("details.case").first();
