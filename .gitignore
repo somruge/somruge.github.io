@@ -3,3 +3,6 @@ test-results/
 playwright-report/
 .dev.vars
 .wrangler/
+.lighthouseci/
+# Lighthouse temp profiles when run under WSL (Windows LOCALAPPDATA leaks in)
+/C:*

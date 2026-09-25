@@ -1,0 +1,75 @@
+# CI for the portfolio (spec 33 §4). Runs checks only: no deploys and no deploy credentials
+# (spec 24 §3). The assistant eval (npm run eval) needs Cloudflare and stays a manual pre-deploy step.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Build, types, unit tests, audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # AC-21: the committed page hashes and worker/profile.md must match what the build produces.
+      - name: Build output is committed
+        run: |
+          npm run build
+          git diff --exit-code -- index.html credits.html worker/profile.md \
+            || { echo "::error::Run 'npm run build' and commit the result."; exit 1; }
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm audit --audit-level=high
+
+  e2e:
+    name: Browser tests (Chromium, WebKit) + axe
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7
+
+  lighthouse:
+    name: Lighthouse (mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npx --yes @lhci/cli@0.15.1 autorun
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
