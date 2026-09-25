@@ -12,7 +12,8 @@
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Limiter"] }],
   "observability": { "enabled": true },
   "vars": {
-    "ASSISTANT_ENABLED": "true",
+    // Off until the Gate 6 launch (owner, 2026-09-25); also the kill switch (spec 28 §2).
+    "ASSISTANT_ENABLED": "false",
     "AI_MODEL": "@cf/openai/gpt-oss-20b",
     "ALLOWED_ORIGINS": "https://somruge.github.io",
     "DAILY_LIMIT": "10"
