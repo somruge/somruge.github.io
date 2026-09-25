@@ -40,12 +40,14 @@ test.describe("AC-04: works without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
   test("all sections visible, case studies expand, game says it needs JS", async ({ page }) => {
     await page.goto("/");
-    for (const id of ["work", "experience", "projects", "ai", "certifications", "play", "contact"]) {
+    for (const id of ["work", "experience", "projects", "ai", "ask", "certifications", "play", "contact"]) {
       await expect(page.locator(`#${id}`)).toBeVisible();
     }
     await page.locator("details.case summary").first().click();
     await expect(page.locator("details.case").first()).toHaveAttribute("open", "");
     await expect(page.getByText("Balloon Pop needs JavaScript.")).toBeVisible();
+    await expect(page.getByText("The assistant needs JavaScript.")).toBeVisible();
+    await expect(page.locator("#askPanel")).toBeHidden();
   });
 });
 

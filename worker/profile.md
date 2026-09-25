@@ -7,6 +7,7 @@ Product Management and AI / Digital Transformation Leader
 Durham, NC · 20+ years
 I turn strategy into delivered outcomes for global teams across the US, India, Australia, and Thailand, and I'm now applying AI to how teams plan, decide, and ship.
 Get in touch LinkedIn
+Or ask my AI assistant →
 
 ## outcomes
 - 20+ years leading programs US, India, Australia, Thailand
@@ -85,9 +86,6 @@ Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. 
 - IndexedDB
 - Bring-your-own-key AI
 Live demo Source
-
-## ai
-How I apply AI
 
 ## certifications
 Certifications & tools

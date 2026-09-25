@@ -18,8 +18,29 @@ const types = {
   ".pdf": "application/pdf",
 };
 
+// In development, /api/* goes to the local assistant Worker (npm run worker:dev), so the page's
+// security policy needs no localhost exception. In production the page calls the Worker directly.
+const WORKER = process.env.WORKER_URL ?? "http://localhost:8787";
+
+async function proxy(req, res, path) {
+  try {
+    const chunks = [];
+    for await (const c of req) chunks.push(c);
+    const upstream = await fetch(WORKER + path.slice("/api".length), {
+      method: req.method,
+      headers: { "content-type": req.headers["content-type"] ?? "application/json", origin: `http://localhost:${port}` },
+      body: req.method === "GET" || req.method === "HEAD" ? undefined : Buffer.concat(chunks),
+    });
+    res.writeHead(upstream.status, { "content-type": upstream.headers.get("content-type") ?? "application/json" });
+    res.end(Buffer.from(await upstream.arrayBuffer()));
+  } catch {
+    res.writeHead(502, { "content-type": "application/json" }).end('{"error":"worker_unreachable"}');
+  }
+}
+
 createServer(async (req, res) => {
   const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+  if (path.startsWith("/api/")) return proxy(req, res, path);
   let file = normalize(join(root, path));
   if (!file.startsWith(root) || file.includes("node_modules")) return res.writeHead(403).end();
   try {

@@ -72,7 +72,11 @@ const blocks = [];
 for (const m of main.matchAll(/<section\b([^>]*)>([\s\S]*?)<\/section>/g)) {
   const id = /\bid="([^"]+)"/.exec(m[1])?.[1];
   if (!id || SKIP_SECTIONS.has(id)) continue;
-  blocks.push(`## ${id}\n${sectionText(m[2])}`);
+  const text = sectionText(m[2]);
+  // A section that's only its heading (everything else still placeholder) isn't offered to the
+  // assistant, so it can't cite a section with nothing confirmed in it.
+  if (text.split("\n").length < 2) continue;
+  blocks.push(`## ${id}\n${text}`);
 }
 const profile = `# Som Ruge — site content\n\n${blocks.join("\n\n")}\n`;
 await writeFile(new URL("worker/profile.md", root), profile);
