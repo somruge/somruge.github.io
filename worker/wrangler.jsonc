@@ -10,10 +10,12 @@
   // The free plan requires SQLite-backed Durable Object classes.
   "durable_objects": { "bindings": [{ "name": "LIMITER", "class_name": "Limiter" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Limiter"] }],
-  "observability": { "enabled": true },
+  // Keep our console.log outcome counts; drop invocation logs, which record request metadata
+  // (incl. the visitor's IP) for 3 days and would contradict the privacy note (spec 25, 40).
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } },
   "vars": {
-    // Off until the Gate 6 launch (owner, 2026-09-25); also the kill switch (spec 28 §2).
-    "ASSISTANT_ENABLED": "false",
+    // Switched on at launch (Gate 6, D-025). Set to "false" and deploy to switch off (kill switch, spec 28 §2).
+    "ASSISTANT_ENABLED": "true",
     "AI_MODEL": "@cf/openai/gpt-oss-20b",
     "ALLOWED_ORIGINS": "https://somruge.github.io",
     "DAILY_LIMIT": "10"
