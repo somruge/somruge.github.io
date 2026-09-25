@@ -17,11 +17,9 @@ Or ask my AI assistant →
 
 ## work
 Selected work
-Three programs, told as problem, approach, and outcome.
+Three programs: what I did, and what changed.
 Scaling Agile across a delivery organisation
 Program Manager / Sr. Scrum Master / RTE · FEI Systems · 2017–2022 Team predictability raised to 90%
-Context
-Problem
 What I did
 - Led the enterprise Agile transformation, implementing SAFe across 10+ teams (~60 people).
 - Ran the Agile Release Train.
@@ -31,10 +29,9 @@ Outcome
 - Execution efficiency up 75%.
 - Release cycle reliability up 25%.
 With AI today
+Use AI to summarise sprint and PI data into early risk signals, so the RTE spends time on the conversations, not on building reports.
 Governance that sped delivery up
 Director, Program Management · Fidelity Investments · 2022–2026 Time-to-market for key deliverables cut 25%
-Context
-Problem
 What I did
 - Directed delivery across 8+ cross-functional teams (40+ people).
 - Partnered with senior leadership on executing the strategic roadmap.
@@ -44,10 +41,9 @@ Outcome
 - Time-to-market for key deliverables cut 25%.
 - Delivery defects and escalations down ~20%.
 With AI today
+AI-assisted status synthesis across programs, drafted from tickets and notes and reviewed by a person, to cut reporting time and surface cross-team dependencies earlier.
 A monitoring platform that paid for itself
 Project Delivery Manager · Ciber Inc · 2009–2016 $5M saved a year
-Context
-Problem
 What I did
 - Implemented an enterprise-wide Database Activity Monitoring system.
 - Separately, managed a 15+ person team delivering a $3.5M SaaS platform on Microsoft Azure.
@@ -57,6 +53,7 @@ Outcome
 - Development time down 35%.
 - Quality up 22%.
 With AI today
+Anomaly detection that flags unusual database activity for a person to review, instead of rules that have to be tuned by hand.
 See the projects →
 
 ## experience
@@ -86,6 +83,15 @@ Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. 
 - IndexedDB
 - Bring-your-own-key AI
 Live demo Source
+
+## ai
+How I apply AI
+- Start from the decision, not the model
+Find where a team loses time or makes a decision blind, and apply AI there. The "With AI today" notes in each case study start from that question.
+- Keep a person in charge of what matters
+AI suggests; people decide. In PNotes every AI feature is optional and its output is yours to keep or discard.
+- Measure it like any delivery change
+Adopt it when it moves a delivery measure, the same way I've tracked predictability and time-to-market for 20 years.
 
 ## certifications
 Certifications & tools

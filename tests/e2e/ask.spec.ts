@@ -27,6 +27,8 @@ async function setup(page: Page, { status = { enabled: true, remaining: 10, limi
   });
   await page.goto("/");
   await page.locator("#ask").scrollIntoViewIfNeeded();
+  // Let the panel's /status call land before a test interacts, so the two can't race.
+  if (status.enabled) await expect(page.locator("#askRemaining")).toHaveText(/left today/);
   return { turnstileRequests, askBodies };
 }
 

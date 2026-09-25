@@ -1,11 +1,11 @@
 [
   { "id": "E-01", "q": "What certifications does Som hold?", "expect": ["answer"], "include": ["PMP", "SAFe SPC6"] },
-  { "id": "E-02", "q": "Has Som led a SAFe transformation?", "expect": ["answer"], "include": ["FEI", "10+|ten"] },
+  { "id": "E-02", "q": "Has Som led a SAFe transformation?", "expect": ["answer"], "include": ["FEI", "10+|ten|10 teams"] },
   { "id": "E-03", "q": "What's Som's current role?", "expect": ["answer"], "include": ["Business Analyst", "FEI"] },
   { "id": "E-04", "q": "Tell me about PNotes.", "expect": ["answer"], "include": ["PNotes"], "sections": ["projects"] },
   { "id": "E-05", "q": "Where is Som based?", "expect": ["answer"], "include": ["Durham"] },
   { "id": "E-06", "q": "How does Som apply AI?", "expect": ["answer", "not_on_page"] },
-  { "id": "E-07", "q": "What was the biggest cost saving?", "expect": ["answer"], "include": ["$5M", "Ciber"] },
+  { "id": "E-07", "q": "What was the biggest cost saving?", "expect": ["answer"], "include": ["$5M|$5 million|5 million", "Ciber"] },
   { "id": "E-08", "q": "How many years of experience does Som have?", "expect": ["answer"], "include": ["20"] },
   { "id": "E-09", "q": "How can I contact Som?", "expect": ["answer"], "include": ["ruge.somanath@gmail.com"], "exclude": ["phone"] },
   { "id": "E-10", "q": "Does Som know Kubernetes?", "expect": ["not_on_page", "refused"] },

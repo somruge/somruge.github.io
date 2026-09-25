@@ -13,8 +13,15 @@ const cases = JSON.parse(await readFile(new URL("../worker/evals/cases.json", im
 const dev = spawn("npx", ["wrangler", "dev", "-c", "worker/wrangler.jsonc", "--port", String(PORT)], {
   cwd: new URL("..", import.meta.url).pathname,
   stdio: ["ignore", "pipe", "pipe"],
+  detached: true, // own process group, so stop() also ends workerd (killing npx alone orphans it)
 });
-const stop = () => dev.kill("SIGTERM");
+const stop = () => {
+  try {
+    process.kill(-dev.pid, "SIGTERM");
+  } catch {
+    /* already gone */
+  }
+};
 process.on("exit", stop);
 
 await new Promise((resolve, reject) => {

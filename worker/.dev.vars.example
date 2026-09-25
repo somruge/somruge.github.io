@@ -3,3 +3,5 @@ TURNSTILE_SECRET=1x0000000000000000000000000000000AA
 IP_HASH_KEY=local-dev-only
 ALLOWED_ORIGINS=http://localhost:8080
 DAILY_LIMIT=1000
+# Production deploys switched off until launch (D-021); local dev and evals run switched on.
+ASSISTANT_ENABLED=true

@@ -109,8 +109,9 @@ test("no horizontal scroll at 320px (400% reflow)", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
-test("placeholders are marked, so the Gate 6 check can find them", async ({ page }) => {
-  await page.goto("/");
-  // Documents the current count; the release check (40) requires zero.
-  expect(await page.locator("[data-placeholder]").count()).toBeGreaterThan(0);
+test("no placeholder content remains (Gate 6 requirement)", async ({ page }) => {
+  for (const path of ["/", "/credits.html"]) {
+    await page.goto(path);
+    await expect(page.locator("[data-placeholder], .placeholder")).toHaveCount(0);
+  }
 });
