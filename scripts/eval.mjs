@@ -50,7 +50,8 @@ for (const c of cases) {
   const res = await call("/ask", { method: "POST", body: JSON.stringify({ question: c.q, turnstileToken: "XXXX.DUMMY.TOKEN.XXXX" }) });
   const body = await res.json();
   const ms = Date.now() - started;
-  const text = body.text ?? "";
+  // Normalise the model's typography (no-break spaces, non-breaking hyphens) before matching.
+  const text = (body.text ?? "").replace(/\s/g, " ").replace(/[\u2010-\u2013]/g, "-");
   const problems = [];
   if (res.status !== 200) problems.push(`HTTP ${res.status} ${JSON.stringify(body)}`);
   if (!c.expect.includes(body.kind)) problems.push(`kind ${body.kind}, expected ${c.expect.join("/")}`);

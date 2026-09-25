@@ -74,6 +74,18 @@ Test Lead, Wipro Technologies (2007–2009) · Senior Test Analyst, ANZ IT (2005
 
 ## projects
 Projects
+Som's Trip Planner — plan trips together, live
+A collaborative trip planner I specified end to end before writing any code: one shared itinerary, map and budget that everyone on the trip edits live, even across dropped connections.
+Where the AI fits
+The assistant drafts days, fills gaps and estimates costs, then shows the changes as a proposal. Nothing happens until you accept.
+- React
+- TypeScript
+- Cloudflare Workers & Durable Objects
+- Postgres
+- Real-time collaboration
+- Guardrailed AI
+Try the live demo How it's built
+No sign-up: the demo opens a sample trip with a bot editing alongside you, deleted after 24 hours.
 PNotes — a local-first notes app with optional AI
 A notes app I built end to end to get hands-on with applying AI to everyday tools. Create, tag, pin, and search notes stored entirely in your browser.
 Where the AI fits
@@ -89,7 +101,7 @@ How I apply AI
 - Start from the decision, not the model
 Find where a team loses time or makes a decision blind, and apply AI there. The "With AI today" notes in each case study start from that question.
 - Keep a person in charge of what matters
-AI suggests; people decide. In PNotes every AI feature is optional and its output is yours to keep or discard.
+AI suggests; people decide. In Trip Planner the assistant proposes changes and nothing happens until you accept; in PNotes every AI feature is optional.
 - Measure it like any delivery change
 Adopt it when it moves a delivery measure, the same way I've tracked predictability and time-to-market for 20 years.
 
