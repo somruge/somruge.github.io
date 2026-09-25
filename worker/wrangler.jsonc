@@ -1,0 +1,24 @@
+// The portfolio assistant (spec 22 §3). Page: GitHub Pages; this Worker serves /ask and /status only.
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "somruge-ask",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "rules": [{ "type": "Text", "globs": ["**/*.md"], "fallthrough": true }],
+  "ai": { "binding": "AI", "remote": true },
+  // The free plan requires SQLite-backed Durable Object classes.
+  "durable_objects": { "bindings": [{ "name": "LIMITER", "class_name": "Limiter" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Limiter"] }],
+  // Keep our console.log outcome counts; drop invocation logs, which record request metadata
+  // (incl. the visitor's IP) for 3 days and would contradict the privacy note (spec 25, 40).
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } },
+  "vars": {
+    // Switched on at launch (Gate 6, D-025). Set to "false" and deploy to switch off (kill switch, spec 28 §2).
+    "ASSISTANT_ENABLED": "true",
+    "AI_MODEL": "@cf/openai/gpt-oss-20b",
+    "ALLOWED_ORIGINS": "https://somruge.github.io",
+    "DAILY_LIMIT": "10"
+  }
+  // Secrets (wrangler secret put): TURNSTILE_SECRET, IP_HASH_KEY. Local values go in .dev.vars.
+}

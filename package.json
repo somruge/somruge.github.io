@@ -1,0 +1,23 @@
+{
+  "name": "somruge-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test:e2e": "playwright test",
+    "test": "vitest run",
+    "test:worker": "vitest run worker",
+    "typecheck": "tsc -p worker",
+    "eval": "node scripts/eval.mjs",
+    "worker:dev": "wrangler dev -c worker/wrangler.jsonc --port 8787"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@cloudflare/workers-types": "^5.20260925.1",
+    "@playwright/test": "1.63.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2",
+    "wrangler": "^4.140.0"
+  }
+}

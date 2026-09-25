@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://somruge.github.io/sitemap.xml

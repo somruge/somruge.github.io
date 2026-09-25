@@ -7,6 +7,7 @@
   const timeEl = document.getElementById("gameTime");
   const scoreEl = document.getElementById("gameScore");
   const resultEl = document.getElementById("gameResult");
+  const bestEl = document.getElementById("gameBest");
 
   const ROUND_SECONDS = 10;
   const SPAWN_MS = 480;
@@ -16,6 +17,8 @@
   const POP_ANIM_MS = 200;
   const GOLDEN_CHANCE = 0.1;
   const BLOCKER_CHANCE = 0.16;
+  const LANES = 5; // keyboard play: ←/→ pick a lane, Space/Enter pops (FR-21)
+  const BEST_KEY = "balloonPopBest";
 
   const NORMAL_COLORS = ["#1F8A70", "#E2725B", "#4F86C6", "#8E5572", "#4CAA5C"];
   const GOLDEN_COLOR = "#F2B705";
@@ -30,6 +33,36 @@
   let countdownTimer = null;
   let lastFrame = 0;
   let canvasSize = { width: 0, height: 0 };
+  let lane = Math.floor(LANES / 2);
+  let keyboardUsed = false;
+
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Personal best (FR-23): shown only when storage works.
+  function readBest() {
+    try {
+      const n = Number(localStorage.getItem(BEST_KEY));
+      return Number.isFinite(n) && n > 0 ? n : 0;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveBest(n) {
+    try {
+      localStorage.setItem(BEST_KEY, String(n));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function showBest(best, isNew) {
+    if (!bestEl || best === null) return;
+    bestEl.textContent = best > 0 ? (isNew ? `New personal best: ${best} pts` : `Personal best: ${best} pts`) : "";
+  }
+
+  showBest(readBest(), false);
 
   function sizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
@@ -119,6 +152,14 @@
 
   function drawPop(b, now) {
     const t = (now - b.popStart) / POP_ANIM_MS;
+    if (reducedMotionQuery.matches) {
+      // Reduced motion (FR-24): a plain fade instead of the burst.
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, 1 - t);
+      drawBalloon(b, now);
+      ctx.restore();
+      return;
+    }
     const radius = b.r * (1 + t * 0.9);
     ctx.save();
     ctx.globalAlpha = Math.max(0, 1 - t);
@@ -140,6 +181,7 @@
     lastFrame = now;
 
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+    if (keyboardUsed || canvas.matches(":focus-visible")) drawLane();
 
     balloons = balloons.filter((b) => {
       if (b.popping) return now - b.popStart < POP_ANIM_MS;
@@ -152,11 +194,35 @@
         return;
       }
       b.y -= RISE_SPEED * dt;
-      b.x = b.baseX + Math.sin((now - b.born) / WOBBLE_PERIOD + b.phase) * WOBBLE_AMPLITUDE;
+      const wobble = reducedMotionQuery.matches ? 0 : Math.sin((now - b.born) / WOBBLE_PERIOD + b.phase) * WOBBLE_AMPLITUDE;
+      b.x = b.baseX + wobble;
       drawBalloon(b, now);
     });
 
     if (playing) rafId = requestAnimationFrame(tick);
+  }
+
+  function laneWidth() {
+    return canvasSize.width / LANES;
+  }
+
+  function drawLane() {
+    const primary = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim() || "#1f5f5b";
+    ctx.save();
+    ctx.fillStyle = primary;
+    ctx.globalAlpha = 0.12;
+    ctx.fillRect(lane * laneWidth(), 0, laneWidth(), canvasSize.height);
+    ctx.globalAlpha = 0.6;
+    ctx.fillRect(lane * laneWidth(), canvasSize.height - 4, laneWidth(), 4);
+    ctx.restore();
+  }
+
+  function pop(b) {
+    const delta = b.isBlocker ? -2 : b.isGolden ? 5 : 1;
+    score = Math.max(0, score + delta);
+    scoreEl.textContent = String(score);
+    b.popping = true;
+    b.popStart = performance.now();
   }
 
   function handleClick(evt) {
@@ -172,15 +238,36 @@
       const dx = x - b.x;
       const dy = y - b.y;
       if (Math.sqrt(dx * dx + dy * dy) <= b.r + 4) {
-        const delta = b.isBlocker ? -2 : b.isGolden ? 5 : 1;
-        score = Math.max(0, score + delta);
-        scoreEl.textContent = String(score);
-        b.popping = true;
-        b.popStart = performance.now();
+        pop(b);
         break;
       }
     }
   }
+
+  // Pops the lowest unpopped, visible balloon in the selected lane.
+  function popInLane() {
+    const w = laneWidth();
+    let target = null;
+    for (const b of balloons) {
+      if (b.popping || b.y - b.r > canvasSize.height) continue;
+      if (Math.min(LANES - 1, Math.floor(b.x / w)) !== lane) continue;
+      if (!target || b.y > target.y) target = b;
+    }
+    if (target) pop(target);
+  }
+
+  canvas.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      keyboardUsed = true;
+      lane = Math.max(0, Math.min(LANES - 1, lane + (e.key === "ArrowLeft" ? -1 : 1)));
+    } else if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      keyboardUsed = true;
+      if (playing) popInLane();
+      else startRound();
+    }
+  });
 
   canvas.addEventListener("click", handleClick);
   canvas.addEventListener(
@@ -207,9 +294,16 @@
     balloons = [];
     lastFrame = 0;
     ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+
+    const previous = readBest();
+    const isNew = previous !== null && score > previous && saveBest(score);
+    showBest(isNew ? score : previous, isNew);
+
+    // The only live announcement in the game (FR-22).
     resultEl.textContent = `Score: ${score} pts — ${resultMessage(score)}`;
-    playBtn.textContent = "Play Again";
+    playBtn.textContent = "Play again";
     playBtn.disabled = false;
+    if (document.activeElement === canvas || document.activeElement === document.body) playBtn.focus({ preventScroll: true });
   }
 
   function startRound() {
@@ -223,6 +317,9 @@
     timeEl.textContent = String(timeLeft);
     resultEl.textContent = "";
     playBtn.disabled = true;
+    // The button is disabled mid-round, so keep keyboard focus in the game.
+    canvas.focus({ preventScroll: true });
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "game-played", event: true });
 
     spawnTimer = setInterval(spawnBalloon, SPAWN_MS);
     countdownTimer = setInterval(() => {
