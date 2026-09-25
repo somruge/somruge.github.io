@@ -18,7 +18,7 @@
 
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css?v=1259193f4f">
+<link rel="stylesheet" href="assets/css/site.css?v=454b7767f6">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <script src="assets/js/theme.js?v=26881427f5"></script>
@@ -328,11 +328,13 @@
         <span>Time <span id="gameTime">10</span>s</span>
         <span><span id="gameScore">0</span> pts</span>
       </div>
-      <canvas id="gameCanvas" class="game-canvas" role="img" aria-label="Balloon Pop game area"></canvas>
+      <canvas id="gameCanvas" class="game-canvas" tabindex="0" role="application" aria-label="Balloon Pop game" aria-describedby="gameHint"></canvas>
+      <p id="gameHint" class="game-hint">Click or tap balloons to pop them.<span class="keyboard-hint"> Keyboard: ← → choose a lane, Space pops.</span></p>
       <div class="game-footer">
         <button id="gamePlayBtn" class="btn btn-primary" type="button">Play Balloon Pop</button>
         <p id="gameResult" class="game-result" aria-live="polite"></p>
       </div>
+      <p id="gameBest" class="game-best"></p>
     </div>
     <p class="lede no-js-only">Balloon Pop needs JavaScript.</p>
   </section>
@@ -358,7 +360,7 @@
 </footer>
 
 <script src="assets/js/site.js?v=cfaaafbd58" defer></script>
-<script src="assets/js/game.js?v=6072d9209a" defer></script>
+<script src="assets/js/game.js?v=bcffe18735" defer></script>
 <script data-goatcounter="https://somruge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
