@@ -2,9 +2,9 @@
 
 Personal website, deployed via GitHub Pages. Live at: https://somruge.github.io
 
-Built from the APSF specification in
-[`Structure/projects/Portfolio/spec`](https://github.com/somruge/Structure/tree/main/projects/Portfolio/spec)
-(start with `00-master-spec.md`, then `39-development-handoff.md`).
+Built from a written specification (APSF: product, UX, security, cost and release decisions
+recorded before any code), kept in a private repository. Decision and spec references in the code,
+such as `D-019` or `spec 22 §3`, point into it.
 
 ## Files
 
