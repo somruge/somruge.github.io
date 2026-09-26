@@ -1,0 +1,16 @@
+# Weekly update PRs for npm packages and GitHub Actions (APSF BASE.md §26), checked by CI
+# like any other change. Minor and patch updates come grouped in one PR; majors come alone.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
