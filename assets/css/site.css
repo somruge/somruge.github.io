@@ -286,7 +286,22 @@ main {
 
 /* Hero */
 
-.hero { padding: var(--s-8) 0 var(--s-6); }
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--s-6);
+  padding: var(--s-8) 0 var(--s-6);
+}
+.hero-photo {
+  grid-column: 2;
+  grid-row: 1;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary);
+}
 
 .eyebrow {
   margin: 0 0 var(--s-3);
@@ -726,7 +741,8 @@ html:not(.js) .ask-panel { display: none; }
   body { font-size: 1rem; }
   .section { padding-top: var(--s-7); }
   .section:last-child { padding-bottom: var(--s-7); }
-  .hero { padding: var(--s-7) 0 var(--s-5); }
+  .hero { grid-template-columns: 1fr; gap: var(--s-5); padding: var(--s-7) 0 var(--s-5); }
+  .hero-photo { grid-column: 1; width: 120px; height: 120px; }
   .hero h1 { font-size: 2.25rem; }
   .hero-position { font-size: 1.15rem; }
   .section-head { font-size: 1.4rem; }
