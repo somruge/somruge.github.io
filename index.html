@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' gc.zgo.at https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://somruge-ask.somruge.workers.dev somruge.goatcounter.com; img-src 'self' data: somruge.goatcounter.com; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' gc.zgo.at https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://somruge-ask.somruge.workers.dev somruge.goatcounter.com; img-src 'self' data: somruge.goatcounter.com https://mahaprabha-gurukul.pages.dev; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <title>Som Ruge — Product Management &amp; AI / Digital Transformation Leader</title>
 <meta name="description" content="Product and program leader with 20+ years delivering enterprise Agile transformations, now applying AI to how teams plan, decide, and ship.">
 <link rel="canonical" href="https://somruge.github.io/">
@@ -18,7 +18,7 @@
 
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css?v=33417f17b0">
+<link rel="stylesheet" href="assets/css/site.css?v=59b8efebdf">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <script src="assets/js/theme.js?v=26881427f5"></script>
@@ -242,7 +242,10 @@
       Projects
     </h2>
     <div class="cards">
-      <article class="card card-featured" id="trip-planner">
+      <article class="card card-featured has-media" id="trip-planner">
+        <a class="card-media" href="https://soms-trip-planner.somruge.workers.dev/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <img src="assets/brand/trip-planner.webp" srcset="assets/brand/trip-planner-600.webp 600w, assets/brand/trip-planner.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="630" alt="" loading="lazy" decoding="async">
+        </a>
         <h3>Som's Trip Planner — plan trips together, live</h3>
         <p>
           A collaborative trip planner I specified end to end before writing any code: one shared
@@ -282,6 +285,33 @@
           <a class="btn btn-primary" href="https://pnotes-gamma.vercel.app" target="_blank" rel="noopener">Live demo<span class="visually-hidden"> (opens in new tab)</span></a>
           <a class="btn btn-secondary" href="https://github.com/somruge/pnotes" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in new tab)</span></a>
         </div>
+      </article>
+      <article class="card has-media" id="mahaprabha-gurukul">
+        <a class="card-media" href="https://mahaprabha-gurukul.pages.dev/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <img src="assets/brand/mahaprabha-gurukul.webp" srcset="assets/brand/mahaprabha-gurukul-600.webp 600w, assets/brand/mahaprabha-gurukul.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="600" alt="" loading="lazy" decoding="async">
+        </a>
+        <h3>MahaPrabha Gurukul — learn Bhagavad Gītā shlokas</h3>
+        <p>
+          A free app I built for families to learn Gītā shlokas a step at a time: hear a real recitation
+          with each phrase lit up as it is sung, learn the sounds, chant and record, then remember with
+          gentle memory games and spaced review.
+        </p>
+        <p class="meta-label">Where the AI fits</p>
+        <p>Built with an AI coding assistant; the lesson texts were drafted with AI help and the Sanskrit is checked against a proofread edition. The app itself runs no AI, and a child's learning stays on their own device.</p>
+        <ul class="tags" aria-label="Stack">
+          <li class="tag tag-outline">React</li>
+          <li class="tag tag-outline">TypeScript</li>
+          <li class="tag tag-outline">Cloudflare Pages &amp; D1</li>
+          <li class="tag tag-outline">Child-safe privacy</li>
+        </ul>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://mahaprabha-gurukul.pages.dev/" target="_blank" rel="noopener" data-goatcounter-click="mahaprabha-gurukul">Start learning<span class="visually-hidden"> (opens in new tab)</span></a>
+          <a class="btn btn-secondary" href="https://mahaprabha-gurukul.pages.dev/about" target="_blank" rel="noopener">How it's checked<span class="visually-hidden"> (opens in new tab)</span></a>
+        </div>
+        <p class="card-note card-badge">
+          <img src="https://mahaprabha-gurukul.pages.dev/api/appreciation/badge.svg" alt="Thank-yous and star ratings from families using MahaPrabha Gurukul" height="28" loading="lazy" decoding="async">
+          <span>Free · no ads · no sign-up needed. First edition: 18 shlokas, more coming.</span>
+        </p>
       </article>
     </div>
   </section>
