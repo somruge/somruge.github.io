@@ -587,6 +587,8 @@ main {
 .cert-thumb { display: block; overflow: hidden; margin-bottom: var(--s-3); border: 1px solid var(--border); border-radius: calc(var(--r-card) - 4px); }
 .cert-thumb img { display: block; width: 100%; height: auto; aspect-ratio: 600 / 464; object-fit: cover; transition: transform 0.6s ease; }
 .cert-thumb:hover img { transform: scale(1.04); }
+/* A portrait certificate is shown whole inside the same landscape box. */
+.cert-thumb-portrait img { object-fit: contain; background: var(--paper); }
 .cert h3 { font-size: 0.95rem; font-weight: 700; line-height: 1.3; margin-bottom: var(--s-1); }
 .cert h3 a { color: inherit; text-decoration: none; }
 .cert h3 a:hover { text-decoration: underline; }

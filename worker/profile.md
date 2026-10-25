@@ -136,8 +136,10 @@ Verify
 Vanderbilt University (Coursera)
 Feb 2024
 Verify
+- ITIL Foundation in IT Service Management
+AXELOS, examined by EXIN
+Sep 2015
 - SAFe SPC6
-- ITIL
 - A-CSM
 - Jira
 - Jira Align
