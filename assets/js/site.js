@@ -104,19 +104,12 @@ document.querySelectorAll("details.case").forEach((d) => {
   });
 })();
 
-// Projects carousel: one project at a time, moving on every 8 seconds and looping. It stops while the
-// pointer or keyboard focus is on it, while it is off screen, and when the visitor pauses it; under
-// reduced motion it starts paused. Swipe, the arrows or the dots move it by hand.
-(function () {
-  const carousel = document.getElementById("projectsCarousel");
-  if (!carousel) return;
-  const track = carousel.querySelector(".carousel-track");
-  const slides = [...track.children];
-  const controls = carousel.querySelector(".carousel-controls");
-  const dotsBox = carousel.querySelector(".carousel-dots");
-  const pauseButton = carousel.querySelector(".carousel-pause");
+// Sliders: a row that moves on one item every 8 seconds and loops. It stops while the pointer or
+// keyboard focus is on it, while it is off screen, and when the visitor pauses it; under reduced
+// motion it starts paused. Swipe, the dots (and arrows, when there are any) move it by hand.
+// `active` limits the slider to when it applies (the certificates row only slides on phones).
+function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dotLabel, pauseLabels, active = () => true }) {
   const INTERVAL = 8000;
-
   let current = 0;
   let userPaused = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let hovered = false;
@@ -125,12 +118,9 @@ document.querySelectorAll("details.case").forEach((d) => {
   let timer = null;
 
   const dots = slides.map((slide, i) => {
-    slide.setAttribute("role", "group");
-    slide.setAttribute("aria-roledescription", "slide");
-    slide.setAttribute("aria-label", `${i + 1} of ${slides.length}`);
     const dot = document.createElement("button");
     dot.type = "button";
-    dot.setAttribute("aria-label", `Show project ${i + 1}: ${slide.querySelector("h3").textContent.split(" — ")[0]}`);
+    dot.setAttribute("aria-label", dotLabel(slide, i));
     dot.addEventListener("click", () => goTo(i));
     dotsBox.append(dot);
     return dot;
@@ -143,19 +133,19 @@ document.querySelectorAll("details.case").forEach((d) => {
     dots.forEach((dot, j) => dot.setAttribute("aria-current", String(j === i)));
   }
 
-  // While the carousel scrolls itself, the scroll handler below must not read the slides it passes.
+  // While the slider scrolls itself, the scroll handler below must not read the slides it passes.
   let moving = null;
   function goTo(i) {
-    const next = (i + slides.length) % slides.length;
-    track.scrollTo({ left: offset(next) });
-    show(next);
+    const n = (i + slides.length) % slides.length;
+    track.scrollTo({ left: offset(n) });
+    show(n);
     clearTimeout(moving);
     moving = setTimeout(() => (moving = null), 1000);
     restart();
   }
 
   function running() {
-    return !userPaused && !hovered && !focused && onScreen && !document.hidden;
+    return active() && !userPaused && !hovered && !focused && onScreen && !document.hidden;
   }
 
   function restart() {
@@ -165,18 +155,20 @@ document.querySelectorAll("details.case").forEach((d) => {
 
   function setPaused(paused) {
     userPaused = paused;
-    carousel.classList.toggle("is-paused", paused);
-    pauseButton.setAttribute("aria-label", paused ? "Play the slideshow" : "Pause the slideshow");
+    root.classList.toggle("is-paused", paused);
+    pauseButton.setAttribute("aria-label", paused ? pauseLabels.play : pauseLabels.pause);
     restart();
   }
 
-  // A swipe or scroll by hand: follow the slide it settles on and give it the full 8 seconds.
+  // A swipe or scroll by hand: follow the item it settles on and give it the full 8 seconds. When
+  // the row is scrolled to its end, the last item counts as current even if it can't reach the start.
   let settle = null;
   track.addEventListener("scroll", () => {
     clearTimeout(settle);
     settle = setTimeout(() => {
       if (moving && Math.abs(offset(current) - track.scrollLeft) > 2) return;
-      const i = slides.reduce((best, _, j) => (Math.abs(offset(j) - track.scrollLeft) < Math.abs(offset(best) - track.scrollLeft) ? j : best), 0);
+      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+      const i = atEnd ? slides.length - 1 : slides.reduce((best, _, j) => (Math.abs(offset(j) - track.scrollLeft) < Math.abs(offset(best) - track.scrollLeft) ? j : best), 0);
       if (i !== current) {
         show(i);
         restart();
@@ -184,26 +176,75 @@ document.querySelectorAll("details.case").forEach((d) => {
     }, 120);
   });
 
-  carousel.querySelector(".carousel-prev").addEventListener("click", () => goTo(current - 1));
-  carousel.querySelector(".carousel-next").addEventListener("click", () => goTo(current + 1));
+  if (prev) prev.addEventListener("click", () => goTo(current - 1));
+  if (next) next.addEventListener("click", () => goTo(current + 1));
   pauseButton.addEventListener("click", () => setPaused(!userPaused));
-  carousel.addEventListener("mouseenter", () => { hovered = true; restart(); });
-  carousel.addEventListener("mouseleave", () => { hovered = false; restart(); });
-  carousel.addEventListener("focusin", () => { focused = true; restart(); });
-  carousel.addEventListener("focusout", (e) => {
-    if (carousel.contains(e.relatedTarget)) return;
+  root.addEventListener("mouseenter", () => { hovered = true; restart(); });
+  root.addEventListener("mouseleave", () => { hovered = false; restart(); });
+  root.addEventListener("focusin", () => { focused = true; restart(); });
+  root.addEventListener("focusout", (e) => {
+    if (root.contains(e.relatedTarget)) return;
     focused = false;
     restart();
   });
   document.addEventListener("visibilitychange", restart);
   if ("IntersectionObserver" in window) {
-    new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; restart(); }, { threshold: 0.4 }).observe(carousel);
+    new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; restart(); }, { threshold: 0.4 }).observe(track);
   } else {
     onScreen = true;
   }
 
-  carousel.classList.add("is-carousel");
-  controls.hidden = false;
   show(0);
   setPaused(userPaused);
+  return { restart };
+}
+
+// Projects carousel: one project at a time. Without JavaScript the cards stay a stacked list.
+(function () {
+  const carousel = document.getElementById("projectsCarousel");
+  if (!carousel) return;
+  const track = carousel.querySelector(".carousel-track");
+  const slides = [...track.children];
+  slides.forEach((slide, i) => {
+    slide.setAttribute("role", "group");
+    slide.setAttribute("aria-roledescription", "slide");
+    slide.setAttribute("aria-label", `${i + 1} of ${slides.length}`);
+  });
+  makeSlider({
+    root: carousel,
+    track,
+    slides,
+    dotsBox: carousel.querySelector(".carousel-dots"),
+    pauseButton: carousel.querySelector(".carousel-pause"),
+    prev: carousel.querySelector(".carousel-prev"),
+    next: carousel.querySelector(".carousel-next"),
+    dotLabel: (slide, i) => `Show project ${i + 1}: ${slide.querySelector("h3").textContent.split(" — ")[0]}`,
+    pauseLabels: { pause: "Pause the slideshow", play: "Play the slideshow" },
+  });
+  carousel.classList.add("is-carousel");
+  carousel.querySelector(".carousel-controls").hidden = false;
+})();
+
+// Certificates: on phones the tiles are one swipeable row (site.css); here it gets dots and a
+// pause button and moves on every 8 seconds, like the projects. Wider screens keep the grid, with
+// no controls and no movement.
+(function () {
+  const section = document.getElementById("certifications");
+  const track = section && section.querySelector(".certs");
+  const controls = section && section.querySelector(".cert-controls");
+  if (!track || !controls) return;
+  const phone = window.matchMedia("(max-width: 760px)");
+  const slider = makeSlider({
+    root: section,
+    track,
+    slides: [...track.children],
+    dotsBox: controls.querySelector(".carousel-dots"),
+    pauseButton: controls.querySelector(".carousel-pause"),
+    dotLabel: (slide, i) => `Show certificate ${i + 1}: ${slide.querySelector("h3 a").firstChild.textContent.trim()}`,
+    pauseLabels: { pause: "Pause the certificates", play: "Play the certificates" },
+    active: () => phone.matches,
+  });
+  section.classList.add("carousel");
+  phone.addEventListener("change", slider.restart);
+  controls.hidden = false;
 })();

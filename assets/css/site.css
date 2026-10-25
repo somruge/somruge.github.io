@@ -1017,6 +1017,53 @@ html:not(.js) .ask-panel { display: none; }
   }
 }
 
+/* Phones: project cards. Slimmer padding for more text width; "Where the AI fits" as a tinted
+   callout with the AI sparkle; compact stack chips; any small note, then an equal-width button
+   pair kept at the bottom of every slide, so the buttons don't jump as the carousel moves (they stack on very narrow
+   phones). */
+@media (max-width: 760px) {
+  .card-featured.has-media { padding: var(--s-4); }
+  .card-featured.has-media .card-media { margin: calc(-1 * var(--s-4)) calc(-1 * var(--s-4)) var(--s-4); }
+  .card-featured.has-media h3 { font-size: 1.25rem; line-height: 1.25; margin-bottom: var(--s-2); }
+  .card-featured.has-media .card-main > p:not(.card-note) { margin-bottom: var(--s-4); }
+  .card-ai {
+    margin-bottom: var(--s-4);
+    padding: var(--s-3);
+    background: color-mix(in srgb, var(--c-ai-a) 8%, transparent);
+    border-left: 3px solid var(--c-ai-a);
+    border-radius: 0 var(--r-control) var(--r-control) 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .card-ai .meta-label {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin: 0 0 var(--s-1);
+    color: var(--c-ai-a);
+    font-weight: 700;
+  }
+  .card-ai .meta-label::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    background: linear-gradient(135deg, var(--c-ai-a), var(--c-ai-b));
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.5 2.5l2 5.4a2 2 0 0 0 1.2 1.2l5.4 2-5.4 2a2 2 0 0 0-1.2 1.2l-2 5.4-2-5.4a2 2 0 0 0-1.2-1.2l-5.4-2 5.4-2a2 2 0 0 0 1.2-1.2Z'/%3E%3Cpath d='M19 2l.8 1.9 1.9.8-1.9.8L19 7.4l-.8-1.9-1.9-.8 1.9-.8Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.5 2.5l2 5.4a2 2 0 0 0 1.2 1.2l5.4 2-5.4 2a2 2 0 0 0-1.2 1.2l-2 5.4-2-5.4a2 2 0 0 0-1.2-1.2l-5.4-2 5.4-2a2 2 0 0 0 1.2-1.2Z'/%3E%3Cpath d='M19 2l.8 1.9 1.9.8-1.9.8L19 7.4l-.8-1.9-1.9-.8 1.9-.8Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .card-featured.has-media .tags { gap: var(--s-1) var(--s-2); margin-bottom: var(--s-4); }
+  .card-featured.has-media .tag { padding: 0.15rem 0.6rem; font-size: 0.8rem; }
+  .card-featured.has-media .actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    margin-top: auto;
+  }
+  /* The note moves above the buttons, so the buttons end every card at the same height. */
+  .card-featured.has-media .card-note { order: 5; margin: auto 0 var(--s-3); font-size: 0.85rem; }
+  .card-featured.has-media .actions { order: 6; }
+  .card-featured.has-media:has(.card-note) .actions { margin-top: 0; }
+}
+
 /* Phones: certificates become one row you swipe through. The row runs to the screen edges and the
    next tile peeks in, which shows there is more; each tile snaps to the left margin. */
 @media (max-width: 760px) {
@@ -1032,8 +1079,15 @@ html:not(.js) .ask-panel { display: none; }
     scrollbar-width: none;
   }
   .certs::-webkit-scrollbar { display: none; }
+  .certs { scroll-behavior: smooth; margin-bottom: 0; }
+  .cert-controls { margin: var(--s-2) 0 var(--s-5); }
+  @media (prefers-reduced-motion: reduce) { .certs { scroll-behavior: auto; } }
   /* position: relative keeps each tile's visually hidden text inside the row, not off the page. */
   .cert { position: relative; flex: 0 0 min(72%, 260px); scroll-snap-align: start; }
+}
+/* The certificates' dots and pause button belong to the phone row only. */
+@media (min-width: 761px) {
+  .carousel-controls.cert-controls { display: none; }
 }
 
 /* Phones: case-study cards read top to bottom — company and years as a small label, the title,
