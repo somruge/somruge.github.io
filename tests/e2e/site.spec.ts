@@ -35,12 +35,36 @@ test("the Résumé button downloads a real PDF", async ({ page, request }) => {
 test("Trip Planner is the featured project, with demo and build-story links", async ({ page }) => {
   await page.goto("/");
   const cards = page.locator("#projects .card");
-  await expect(cards).toHaveCount(2);
+  await expect(cards).toHaveCount(3);
   await expect(cards.first()).toHaveClass(/card-featured/);
   await expect(cards.first().getByRole("heading")).toContainText("Som's Trip Planner");
   await expect(cards.first().getByRole("link", { name: /Try the live demo/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/");
   await expect(cards.first().getByRole("link", { name: /How it's built/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/about");
   await expect(cards.nth(1).getByRole("heading")).toContainText("PNotes");
+});
+
+test("MahaPrabha Gurukul card links to the live app and shows its ratings badge", async ({ page }) => {
+  await page.goto("/");
+  const card = page.locator("#mahaprabha-gurukul");
+  await expect(card.getByRole("heading")).toContainText("MahaPrabha Gurukul");
+  await expect(card.getByRole("link", { name: /Start learning/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.pages.dev/");
+  await expect(card.getByRole("link", { name: /How it's checked/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.pages.dev/about");
+  const badge = card.locator("img[data-appreciation]");
+  await expect(badge).toHaveAttribute("src", "https://mahaprabha-gurukul.pages.dev/api/appreciation/badge.svg");
+});
+
+test("the MahaPrabha ratings badge stays hidden until the first thank-you", async ({ page }) => {
+  let summary = { ratings: 0, average: null, thanks: 0 };
+  await page.route("https://mahaprabha-gurukul.pages.dev/api/appreciation/summary", (r) => r.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify(summary) }));
+  await page.route("https://mahaprabha-gurukul.pages.dev/api/appreciation/badge.svg", (r) => r.fulfill({ status: 200, contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="28"><rect width="200" height="28" fill="#155e75"/></svg>' }));
+  await page.goto("/");
+  const badge = page.locator("#mahaprabha-gurukul img[data-appreciation]");
+  await page.waitForTimeout(500);
+  await expect(badge).toBeHidden();
+  summary = { ratings: 0, average: null, thanks: 1 };
+  await page.reload();
+  await page.locator("#mahaprabha-gurukul").scrollIntoViewIfNeeded(); // the badge loads lazily, near the screen
+  await expect(badge).toBeVisible();
 });
 
 test("AC-03: case studies open and close by keyboard and by click", async ({ page }) => {

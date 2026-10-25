@@ -505,7 +505,49 @@ main {
 }
 .card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: var(--s-2); }
 .card-featured { grid-column: 1 / -1; }
+/* Project pictures: a cover across the top of a card; beside the text in the wide featured card.
+   The picture repeats the card's first link, so it is hidden from screen readers and the tab order. */
+.card-media {
+  display: block;
+  overflow: hidden;
+  margin: calc(-1 * var(--s-5)) calc(-1 * var(--s-5)) var(--s-5);
+  border-radius: var(--r-card) var(--r-card) 0 0;
+  border-bottom: 1px solid var(--border);
+}
+.card-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.card-media:hover img { transform: scale(1.03); }
+@media (min-width: 761px) {
+  .card-featured.has-media {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    column-gap: var(--s-6, 2rem);
+    align-items: start;
+  }
+  .card-featured.has-media > .card-media {
+    grid-column: 1;
+    grid-row: 1 / span 12;
+    align-self: start;
+    margin: 0;
+    border-radius: calc(var(--r-card) - 4px);
+    border: 1px solid var(--border);
+  }
+  .card-featured.has-media > .card-media img { aspect-ratio: 1200 / 630; }
+  .card-featured.has-media > :not(.card-media) { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-media img { transition: none; }
+  .card-media:hover img { transform: none; }
+}
 .card-note { margin-top: var(--s-3); color: var(--ink-muted); font-size: 0.9rem; }
+.card-badge { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
+.card-badge img { height: 28px; width: auto; max-width: 100%; }
 .card .actions { margin-top: var(--s-5); }
 
 .meta-label {
