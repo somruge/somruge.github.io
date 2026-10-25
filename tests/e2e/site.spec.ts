@@ -49,7 +49,7 @@ test("MahaPrabha Gurukul and Trip Planner are the featured projects, then PNotes
   await expect(cards.nth(2).getByRole("heading")).toContainText("PNotes");
 });
 
-test("projects carousel moves on after 8 seconds, by the arrows and dots, and can be paused", async ({ page }) => {
+test("projects carousel moves on after 4 seconds, by the arrows and dots, and can be paused", async ({ page }) => {
   await page.clock.install();
   await page.goto("/");
   const carousel = page.locator("#projectsCarousel");
@@ -59,7 +59,7 @@ test("projects carousel moves on after 8 seconds, by the arrows and dots, and ca
   await expect(dots).toHaveCount(3);
   await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
 
-  await page.clock.runFor(8100);
+  await page.clock.runFor(4100);
   await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
   await expect(page.locator("#trip-planner")).toBeInViewport({ ratio: 0.9 });
 
@@ -223,7 +223,7 @@ test("phones: project buttons sit at the same height on every slide", async ({ p
   expect(new Set(tops).size).toBe(1);
 });
 
-test("phones: certificates have dots and a pause button and move on every 8 seconds", async ({ page }) => {
+test("phones: certificates have dots and a pause button and move on every 4 seconds", async ({ page }) => {
   await page.clock.install();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
@@ -235,7 +235,7 @@ test("phones: certificates have dots and a pause button and move on every 8 seco
   await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
   await expect(section.locator(".carousel-prev, .carousel-next")).toHaveCount(0);
 
-  await page.clock.runFor(8100);
+  await page.clock.runFor(4100);
   await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
   await section.getByRole("button", { name: /Show certificate 6: ITIL/ }).click();
   await expect(dots.nth(5)).toHaveAttribute("aria-current", "true");

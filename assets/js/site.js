@@ -104,12 +104,12 @@ document.querySelectorAll("details.case").forEach((d) => {
   });
 })();
 
-// Sliders: a row that moves on one item every 8 seconds and loops. It stops while the pointer or
+// Sliders: a row that moves on one item every 4 seconds and loops. It stops while the pointer or
 // keyboard focus is on it, while it is off screen, and when the visitor pauses it; under reduced
 // motion it starts paused. Swipe, the dots (and arrows, when there are any) move it by hand.
 // `active` limits the slider to when it applies (the certificates row only slides on phones).
 function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dotLabel, pauseLabels, active = () => true }) {
-  const INTERVAL = 8000;
+  const INTERVAL = 4000;
   let current = 0;
   let userPaused = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let hovered = false;
@@ -160,7 +160,7 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
     restart();
   }
 
-  // A swipe or scroll by hand: follow the item it settles on and give it the full 8 seconds. When
+  // A swipe or scroll by hand: follow the item it settles on and give it the full 4 seconds. When
   // the row is scrolled to its end, the last item counts as current even if it can't reach the start.
   let settle = null;
   track.addEventListener("scroll", () => {
@@ -226,7 +226,7 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
 })();
 
 // Certificates: on phones the tiles are one swipeable row (site.css); here it gets dots and a
-// pause button and moves on every 8 seconds, like the projects. Wider screens keep the grid, with
+// pause button and moves on every 4 seconds, like the projects. Wider screens keep the grid, with
 // no controls and no movement.
 (function () {
   const section = document.getElementById("certifications");

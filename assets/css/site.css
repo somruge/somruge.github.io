@@ -644,7 +644,7 @@ main {
   .cert-thumb:hover img { transform: none; }
 }
 
-/* Projects carousel (site.js adds .is-carousel): one project at a time, sliding every 8 seconds.
+/* Projects carousel (site.js adds .is-carousel): one project at a time, sliding every 4 seconds.
    Without JavaScript the cards stay a stacked list. */
 .carousel.is-carousel .carousel-track {
   position: relative; /* keeps visually hidden text in off-screen slides inside the scroll box */
