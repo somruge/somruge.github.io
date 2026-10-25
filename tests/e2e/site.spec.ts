@@ -32,15 +32,17 @@ test("the Résumé button downloads a real PDF", async ({ page, request }) => {
   expect((await res.body()).subarray(0, 5).toString()).toBe("%PDF-");
 });
 
-test("Trip Planner is the featured project, with demo and build-story links", async ({ page }) => {
+test("MahaPrabha Gurukul and Trip Planner are the featured projects, then PNotes", async ({ page }) => {
   await page.goto("/");
   const cards = page.locator("#projects .card");
   await expect(cards).toHaveCount(3);
-  await expect(cards.first()).toHaveClass(/card-featured/);
-  await expect(cards.first().getByRole("heading")).toContainText("Som's Trip Planner");
-  await expect(cards.first().getByRole("link", { name: /Try the live demo/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/");
-  await expect(cards.first().getByRole("link", { name: /How it's built/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/about");
-  await expect(cards.nth(1).getByRole("heading")).toContainText("PNotes");
+  await expect(cards.nth(0)).toHaveClass(/card-featured/);
+  await expect(cards.nth(0).getByRole("heading")).toContainText("MahaPrabha Gurukul");
+  await expect(cards.nth(1)).toHaveClass(/card-featured/);
+  await expect(cards.nth(1).getByRole("heading")).toContainText("Som's Trip Planner");
+  await expect(cards.nth(1).getByRole("link", { name: /Try the live demo/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/");
+  await expect(cards.nth(1).getByRole("link", { name: /How it's built/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/about");
+  await expect(cards.nth(2).getByRole("heading")).toContainText("PNotes");
 });
 
 test("MahaPrabha Gurukul card links to the live app and shows its ratings badge", async ({ page }) => {

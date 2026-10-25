@@ -74,6 +74,16 @@ Test Lead, Wipro Technologies (2007–2009) · Senior Test Analyst, ANZ IT (2005
 
 ## projects
 Projects
+MahaPrabha Gurukul — learn Bhagavad Gītā shlokas
+A free app I built for families to learn Gītā shlokas a step at a time: hear a real recitation with each phrase lit up as it is sung, learn the sounds, chant and record, then remember with gentle memory games and spaced review.
+- React
+- TypeScript
+- Cloudflare Pages & D1
+- Child-safe privacy
+Start learning How it's checked
+Free · no ads · no sign-up needed. First edition: 18 shlokas, more coming.
+Where the AI fits
+Built with an AI coding assistant; the lesson texts were drafted with AI help and the Sanskrit is checked against a proofread edition. The app itself runs no AI, and a child's learning stays on their own device.
 Som's Trip Planner — plan trips together, live
 A collaborative trip planner I specified end to end before writing any code: one shared itinerary, map and budget that everyone on the trip edits live, even across dropped connections.
 - React
@@ -95,16 +105,6 @@ Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. 
 - IndexedDB
 - Bring-your-own-key AI
 Live demo Source
-MahaPrabha Gurukul — learn Bhagavad Gītā shlokas
-A free app I built for families to learn Gītā shlokas a step at a time: hear a real recitation with each phrase lit up as it is sung, learn the sounds, chant and record, then remember with gentle memory games and spaced review.
-Where the AI fits
-Built with an AI coding assistant; the lesson texts were drafted with AI help and the Sanskrit is checked against a proofread edition. The app itself runs no AI, and a child's learning stays on their own device.
-- React
-- TypeScript
-- Cloudflare Pages & D1
-- Child-safe privacy
-Start learning How it's checked
-Free · no ads · no sign-up needed. First edition: 18 shlokas, more coming.
 
 ## ai
 How I apply AI

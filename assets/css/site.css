@@ -537,7 +537,7 @@ main {
     border-radius: calc(var(--r-card) - 4px);
     border: 1px solid var(--border);
   }
-  .card-featured.has-media .card-media img { aspect-ratio: 1200 / 630; }
+  #trip-planner .card-media img { aspect-ratio: 1200 / 630; }
   /* The title column comes first in reading order; the picture column is shown on the left. */
   .card-featured.has-media .card-side { grid-column: 1; grid-row: 1; }
   .card-featured.has-media .card-main { grid-column: 2; grid-row: 1; }
@@ -558,6 +558,18 @@ main {
 @media (prefers-reduced-motion: reduce) {
   .card-media img { transition: none; }
   .card-media:hover img { transform: none; }
+}
+/* Compact card: a full-width strip — story on the left, stack and actions on the right. */
+.card-compact { grid-column: 1 / -1; }
+@media (min-width: 761px) {
+  .card-compact {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    column-gap: var(--s-6, 2rem);
+    align-items: center;
+  }
+  .card-compact .card-main > :last-child { margin-bottom: 0; }
+  .card-compact .card-side .actions { margin-top: 0; }
 }
 .card-note { margin-top: var(--s-3); color: var(--ink-muted); font-size: 0.9rem; }
 .card-badge { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
