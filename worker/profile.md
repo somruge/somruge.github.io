@@ -76,8 +76,6 @@ Test Lead, Wipro Technologies (2007–2009) · Senior Test Analyst, ANZ IT (2005
 Projects
 Som's Trip Planner — plan trips together, live
 A collaborative trip planner I specified end to end before writing any code: one shared itinerary, map and budget that everyone on the trip edits live, even across dropped connections.
-Where the AI fits
-The assistant drafts days, fills gaps and estimates costs, then shows the changes as a proposal. Nothing happens until you accept.
 - React
 - TypeScript
 - Cloudflare Workers & Durable Objects
@@ -86,6 +84,8 @@ The assistant drafts days, fills gaps and estimates costs, then shows the change
 - Guardrailed AI
 Try the live demo How it's built
 No sign-up: the demo opens a sample trip with a bot editing alongside you, deleted after 24 hours.
+Where the AI fits
+The assistant drafts days, fills gaps and estimates costs, then shows the changes as a proposal. Nothing happens until you accept.
 PNotes — a local-first notes app with optional AI
 A notes app I built end to end to get hands-on with applying AI to everyday tools. Create, tag, pin, and search notes stored entirely in your browser.
 Where the AI fits

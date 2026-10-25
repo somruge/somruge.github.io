@@ -524,22 +524,36 @@ main {
 }
 .card-media:hover img { transform: scale(1.03); }
 @media (min-width: 761px) {
+  /* Featured card: two columns that each flow on their own — picture with "Where the AI
+     fits" on the left; title, story, stack and actions on the right. */
   .card-featured.has-media {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     column-gap: var(--s-6, 2rem);
     align-items: start;
   }
-  .card-featured.has-media > .card-media {
-    grid-column: 1;
-    grid-row: 1 / span 12;
-    align-self: start;
-    margin: 0;
+  .card-featured.has-media .card-media {
+    margin: 0 0 var(--s-5);
     border-radius: calc(var(--r-card) - 4px);
     border: 1px solid var(--border);
   }
-  .card-featured.has-media > .card-media img { aspect-ratio: 1200 / 630; }
-  .card-featured.has-media > :not(.card-media) { grid-column: 2; }
+  .card-featured.has-media .card-media img { aspect-ratio: 1200 / 630; }
+  /* The title column comes first in reading order; the picture column is shown on the left. */
+  .card-featured.has-media .card-side { grid-column: 1; grid-row: 1; }
+  .card-featured.has-media .card-main { grid-column: 2; grid-row: 1; }
+}
+@media (max-width: 760px) {
+  /* Phones: one column in reading order — picture, title, story, AI, stack, actions. */
+  .card-featured.has-media { display: flex; flex-direction: column; }
+  .card-featured.has-media .card-side,
+  .card-featured.has-media .card-main { display: contents; }
+  .card-featured.has-media .card-media { order: 0; }
+  .card-featured.has-media h3 { order: 1; }
+  .card-featured.has-media .card-main > p:not(.card-note) { order: 2; }
+  .card-featured.has-media .card-ai { order: 3; }
+  .card-featured.has-media .tags { order: 4; }
+  .card-featured.has-media .actions { order: 5; }
+  .card-featured.has-media .card-note { order: 6; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card-media img { transition: none; }

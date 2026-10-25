@@ -18,7 +18,7 @@
 
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css?v=59b8efebdf">
+<link rel="stylesheet" href="assets/css/site.css?v=b10490194e">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <script src="assets/js/theme.js?v=26881427f5"></script>
@@ -243,29 +243,35 @@
     </h2>
     <div class="cards">
       <article class="card card-featured has-media" id="trip-planner">
-        <a class="card-media" href="https://soms-trip-planner.somruge.workers.dev/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-          <img src="assets/brand/trip-planner.webp" srcset="assets/brand/trip-planner-600.webp 600w, assets/brand/trip-planner.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="630" alt="" loading="lazy" decoding="async">
-        </a>
-        <h3>Som's Trip Planner — plan trips together, live</h3>
-        <p>
-          A collaborative trip planner I specified end to end before writing any code: one shared
-          itinerary, map and budget that everyone on the trip edits live, even across dropped connections.
-        </p>
-        <p class="meta-label">Where the AI fits</p>
-        <p>The assistant drafts days, fills gaps and estimates costs, then shows the changes as a proposal. Nothing happens until you accept.</p>
-        <ul class="tags" aria-label="Stack">
-          <li class="tag tag-outline">React</li>
-          <li class="tag tag-outline">TypeScript</li>
-          <li class="tag tag-outline">Cloudflare Workers &amp; Durable Objects</li>
-          <li class="tag tag-outline">Postgres</li>
-          <li class="tag tag-outline">Real-time collaboration</li>
-          <li class="tag tag-outline">Guardrailed AI</li>
-        </ul>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://soms-trip-planner.somruge.workers.dev/" target="_blank" rel="noopener" data-goatcounter-click="trip-planner-demo">Try the live demo<span class="visually-hidden"> (opens in new tab)</span></a>
-          <a class="btn btn-secondary" href="https://soms-trip-planner.somruge.workers.dev/about" target="_blank" rel="noopener">How it's built<span class="visually-hidden"> (opens in new tab)</span></a>
+        <div class="card-main">
+          <h3>Som's Trip Planner — plan trips together, live</h3>
+          <p>
+            A collaborative trip planner I specified end to end before writing any code: one shared
+            itinerary, map and budget that everyone on the trip edits live, even across dropped connections.
+          </p>
+          <ul class="tags" aria-label="Stack">
+            <li class="tag tag-outline">React</li>
+            <li class="tag tag-outline">TypeScript</li>
+            <li class="tag tag-outline">Cloudflare Workers &amp; Durable Objects</li>
+            <li class="tag tag-outline">Postgres</li>
+            <li class="tag tag-outline">Real-time collaboration</li>
+            <li class="tag tag-outline">Guardrailed AI</li>
+          </ul>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://soms-trip-planner.somruge.workers.dev/" target="_blank" rel="noopener" data-goatcounter-click="trip-planner-demo">Try the live demo<span class="visually-hidden"> (opens in new tab)</span></a>
+            <a class="btn btn-secondary" href="https://soms-trip-planner.somruge.workers.dev/about" target="_blank" rel="noopener">How it's built<span class="visually-hidden"> (opens in new tab)</span></a>
+          </div>
+          <p class="card-note">No sign-up: the demo opens a sample trip with a bot editing alongside you, deleted after 24 hours.</p>
         </div>
-        <p class="card-note">No sign-up: the demo opens a sample trip with a bot editing alongside you, deleted after 24 hours.</p>
+        <div class="card-side">
+          <a class="card-media" href="https://soms-trip-planner.somruge.workers.dev/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="assets/brand/trip-planner.webp" srcset="assets/brand/trip-planner-600.webp 600w, assets/brand/trip-planner.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="630" alt="" loading="lazy" decoding="async">
+          </a>
+          <div class="card-ai">
+            <p class="meta-label">Where the AI fits</p>
+            <p>The assistant drafts days, fills gaps and estimates costs, then shows the changes as a proposal. Nothing happens until you accept.</p>
+          </div>
+        </div>
       </article>
       <article class="card">
         <h3>PNotes — a local-first notes app with optional AI</h3>
