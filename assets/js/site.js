@@ -24,6 +24,18 @@ if (themeToggle) {
   });
 }
 
+// Phones: a refresh always opens at the top section. Tapping a tab leaves its #section in the
+// address, and Safari restores the old scroll position; on a reload both are cleared. A fresh
+// visit to a shared #section link still opens at that section.
+if (window.matchMedia("(max-width: 760px)").matches) {
+  const nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+  if (nav && nav.type === "reload") {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    window.scrollTo(0, 0);
+  }
+}
+
 // Reveal on scroll, only when motion is allowed (13 §7)
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (!reducedMotion && "IntersectionObserver" in window) {

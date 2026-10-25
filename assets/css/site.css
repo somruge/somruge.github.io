@@ -917,6 +917,9 @@ html:not(.js) .ask-panel { display: none; }
    credits & privacy) gets extra bottom padding the height of the bar, so it always ends above it. */
 @media (max-width: 760px) {
   :root { --tabbar-h: calc(3.75rem + env(safe-area-inset-bottom, 0px)); }
+  /* App feel: no rubber-band pull at the page edges, so the header and tab bar never get dragged
+     away from the screen edges (this also turns off pull-to-refresh; Safari's reload still works). */
+  html, body { overscroll-behavior-y: none; }
   .tabbar ~ .footer { padding-bottom: calc(var(--s-6) + var(--tabbar-h)); }
   html { scroll-padding-bottom: var(--tabbar-h); }
 
@@ -1031,6 +1034,68 @@ html:not(.js) .ask-panel { display: none; }
   .certs::-webkit-scrollbar { display: none; }
   /* position: relative keeps each tile's visually hidden text inside the row, not off the page. */
   .cert { position: relative; flex: 0 0 min(72%, 260px); scroll-snap-align: start; }
+}
+
+/* Phones: case-study cards read top to bottom — company and years as a small label, the title,
+   the role, the result as a tinted callout, then a clear "Read the case study" row with the
+   chevron. The meta line's parts become grid items of the summary; the separator is hidden. */
+@media (max-width: 760px) {
+  .case > summary {
+    grid-template-columns: 1fr auto;
+    gap: var(--s-2) var(--s-3);
+  }
+  .case-meta { display: contents; }
+  .case-sep { display: none; }
+  .case-org {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .case-title { grid-column: 1 / -1; grid-row: 2; font-size: 1.2rem; line-height: 1.25; }
+  .case-role { grid-column: 1 / -1; grid-row: 3; color: var(--ink-muted); font-size: 0.92rem; line-height: 1.4; }
+  .case-outcome {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    margin-top: var(--s-1);
+    padding: var(--s-2) var(--s-3);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border-radius: var(--r-control);
+    line-height: 1.35;
+  }
+  .case-outcome::before {
+    content: "";
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.1rem;
+    background: var(--accent);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 17l6-6 4 4 8-8'/%3E%3Cpath d='M14 7h7v7'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 17l6-6 4 4 8-8'/%3E%3Cpath d='M14 7h7v7'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  /* The tap row: a label (decorative to screen readers, which already announce expanded or
+     collapsed) sharing the last row with the chevron. */
+  .case > summary::after {
+    content: "Read the case study";
+    content: "Read the case study" / "";
+    grid-column: 1 / -1;
+    grid-row: 5;
+    margin-top: var(--s-2);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--border);
+    color: var(--primary);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  .case[open] > summary::after { content: "Hide details"; content: "Hide details" / ""; }
+  .case-chevron { grid-column: 2; grid-row: 5; align-self: end; margin-bottom: 0.15rem; }
+  .case[open] { border-color: var(--border-strong); box-shadow: var(--shadow-raised); }
 }
 
 @media (max-width: 359px) {

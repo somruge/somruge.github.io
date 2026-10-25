@@ -135,8 +135,9 @@ test.describe("AC-04: works without JavaScript", () => {
   });
 });
 
-for (const scheme of ["light", "dark"] as const) {
-  test(`AC-18: no serious or critical axe violations (${scheme})`, async ({ page }) => {
+for (const scheme of ["light", "dark"] as const) for (const width of [1280, 390]) {
+  test(`AC-18: no serious or critical axe violations (${scheme}, ${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
     await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
     for (const path of ["/", "/credits.html"]) {
       await page.goto(path);
@@ -192,6 +193,27 @@ test("phones: no hero photo; Get in touch and Résumé side by side", async ({ p
   const resume = await page.getByRole("link", { name: /Résumé/ }).boundingBox();
   expect(Math.abs(touch!.y - resume!.y)).toBeLessThan(1);
   expect(touch!.height).toBeLessThan(50); // one line each, no wrapping
+});
+
+test("phones: case cards stack label, title, role, result and a read-more row", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const card = page.locator("details.case").first();
+  const top = async (sel: string) => (await card.locator(sel).boundingBox())!.y;
+  const order = [await top(".case-org"), await top(".case-title"), await top(".case-role"), await top(".case-outcome"), await top(".case-chevron")];
+  expect([...order].sort((a, b) => a - b)).toEqual(order);
+  await expect(card.locator(".case-sep")).toBeHidden();
+});
+
+test("phones: a refresh opens at the top, even after tapping a tab", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.locator(".tabbar").getByRole("link", { name: "Projects" }).click();
+  await expect(page).toHaveURL(/#projects$/);
+  await page.reload();
+  await expect(page).not.toHaveURL(/#/);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await expect(page.locator(".hero-position")).toBeInViewport();
 });
 
 test("phones: the footer ends above the tab bar", async ({ page }) => {
