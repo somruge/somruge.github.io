@@ -117,12 +117,28 @@ Adopt it when it moves a delivery measure, the same way I've tracked predictabil
 
 ## certifications
 Certifications & tools
-- PMP
+- Project Management Professional (PMP)
+Project Management Institute
+Apr 2013 – Apr 2028
+Verify
+- Certified Practitioner CMMI
+CMMI Institute
+Oct 2026 – Oct 2029
+- AI for Digital Transformation
+Cornell University (eCornell)
+Feb 2025
+Verify
+- Python Data Structures
+University of Michigan (Coursera)
+Jun 2026
+Verify
+- Generative AI for Leaders
+Vanderbilt University (Coursera)
+Feb 2024
+Verify
 - SAFe SPC6
 - ITIL
 - A-CSM
-- Generative AI for Leaders
-- AI for Digital Transformation
 - Jira
 - Jira Align
 - Confluence
