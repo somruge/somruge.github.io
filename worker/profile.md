@@ -74,7 +74,7 @@ Test Lead, Wipro Technologies (2007–2009) · Senior Test Analyst, ANZ IT (2005
 
 ## projects
 Projects
-MahaPrabha Gurukul — learn Bhagavad Gītā shlokas
+!-- Without JavaScript the projects stay a stacked list; site.js turns them into a carousel. --> MahaPrabha Gurukul — learn Bhagavad Gītā shlokas
 A free app I built for families to learn Gītā shlokas a step at a time: hear a real recitation with each phrase lit up as it is sung, learn the sounds, chant and record, then remember with gentle memory games and spaced review.
 - React
 - TypeScript
@@ -98,13 +98,13 @@ Where the AI fits
 The assistant drafts days, fills gaps and estimates costs, then shows the changes as a proposal. Nothing happens until you accept.
 PNotes — a local-first notes app with optional AI
 A notes app I built end to end to get hands-on with applying AI to everyday tools. Create, tag, pin, and search notes stored entirely in your browser.
-Where the AI fits
-Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. The app works fully without it.
 - React
 - TypeScript
 - IndexedDB
 - Bring-your-own-key AI
 Live demo Source
+Where the AI fits
+Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. The app works fully without it.
 
 ## ai
 How I apply AI

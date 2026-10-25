@@ -18,7 +18,7 @@
 
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css?v=5c0232f003">
+<link rel="stylesheet" href="assets/css/site.css?v=8e8c85dd8a">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <script src="assets/js/theme.js?v=26881427f5"></script>
@@ -241,7 +241,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
       Projects
     </h2>
-    <div class="cards">
+    <!-- Without JavaScript the projects stay a stacked list; site.js turns them into a carousel. -->
+    <div class="carousel" id="projectsCarousel" aria-roledescription="carousel" aria-label="Projects">
+    <div class="cards carousel-track">
       <article class="card card-featured has-media" id="mahaprabha-gurukul">
         <div class="card-main">
           <h3>MahaPrabha Gurukul — learn Bhagavad Gītā shlokas</h3>
@@ -306,17 +308,13 @@
           </div>
         </div>
       </article>
-      <article class="card card-compact" id="pnotes">
+      <article class="card card-featured has-media" id="pnotes">
         <div class="card-main">
           <h3>PNotes — a local-first notes app with optional AI</h3>
           <p>
             A notes app I built end to end to get hands-on with applying AI to everyday tools. Create,
             tag, pin, and search notes stored entirely in your browser.
           </p>
-          <p class="meta-label">Where the AI fits</p>
-          <p>Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. The app works fully without it.</p>
-        </div>
-        <div class="card-side">
           <ul class="tags" aria-label="Stack">
             <li class="tag tag-outline">React</li>
             <li class="tag tag-outline">TypeScript</li>
@@ -328,7 +326,30 @@
             <a class="btn btn-secondary" href="https://github.com/somruge/pnotes" target="_blank" rel="noopener">Source<span class="visually-hidden"> (opens in new tab)</span></a>
           </div>
         </div>
+        <div class="card-side">
+          <a class="card-media" href="https://pnotes-gamma.vercel.app" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+            <img src="assets/brand/pnotes.webp" srcset="assets/brand/pnotes-600.webp 600w, assets/brand/pnotes.webp 1200w" sizes="(max-width: 760px) 100vw, 560px" width="1200" height="630" alt="" loading="lazy" decoding="async">
+          </a>
+          <div class="card-ai">
+            <p class="meta-label">Where the AI fits</p>
+            <p>Optional, bring-your-own-key: summarising, tone rewriting, and tag suggestions. The app works fully without it.</p>
+          </div>
+        </div>
       </article>
+    </div>
+    <div class="carousel-controls" hidden>
+      <button class="icon-button carousel-pause" type="button" aria-label="Pause the slideshow">
+        <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
+      </button>
+      <div class="carousel-dots"></div>
+      <button class="icon-button carousel-prev" type="button" aria-label="Previous project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="icon-button carousel-next" type="button" aria-label="Next project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
     </div>
   </section>
 
@@ -452,7 +473,7 @@
   <p><a href="credits.html">Credits &amp; privacy</a></p>
 </footer>
 
-<script src="assets/js/site.js?v=a9a4815c47" defer></script>
+<script src="assets/js/site.js?v=36fe6925f2" defer></script>
 <script src="assets/js/ask.js?v=d89a118114" defer></script>
 <script src="assets/js/game.js?v=bcffe18735" defer></script>
 <script data-goatcounter="https://somruge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>

@@ -110,3 +110,107 @@ document.querySelectorAll("details.case").forEach((d) => {
       .catch(() => {});
   });
 })();
+
+// Projects carousel: one project at a time, moving on every 8 seconds and looping. It stops while the
+// pointer or keyboard focus is on it, while it is off screen, and when the visitor pauses it; under
+// reduced motion it starts paused. Swipe, the arrows or the dots move it by hand.
+(function () {
+  const carousel = document.getElementById("projectsCarousel");
+  if (!carousel) return;
+  const track = carousel.querySelector(".carousel-track");
+  const slides = [...track.children];
+  const controls = carousel.querySelector(".carousel-controls");
+  const dotsBox = carousel.querySelector(".carousel-dots");
+  const pauseButton = carousel.querySelector(".carousel-pause");
+  const INTERVAL = 8000;
+
+  let current = 0;
+  let userPaused = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let hovered = false;
+  let focused = false;
+  let onScreen = false;
+  let timer = null;
+
+  const dots = slides.map((slide, i) => {
+    slide.setAttribute("role", "group");
+    slide.setAttribute("aria-roledescription", "slide");
+    slide.setAttribute("aria-label", `${i + 1} of ${slides.length}`);
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Show project ${i + 1}: ${slide.querySelector("h3").textContent.split(" — ")[0]}`);
+    dot.addEventListener("click", () => goTo(i));
+    dotsBox.append(dot);
+    return dot;
+  });
+
+  const offset = (i) => slides[i].offsetLeft - slides[0].offsetLeft;
+
+  function show(i) {
+    current = i;
+    dots.forEach((dot, j) => dot.setAttribute("aria-current", String(j === i)));
+  }
+
+  // While the carousel scrolls itself, the scroll handler below must not read the slides it passes.
+  let moving = null;
+  function goTo(i) {
+    const next = (i + slides.length) % slides.length;
+    track.scrollTo({ left: offset(next) });
+    show(next);
+    clearTimeout(moving);
+    moving = setTimeout(() => (moving = null), 1000);
+    restart();
+  }
+
+  function running() {
+    return !userPaused && !hovered && !focused && onScreen && !document.hidden;
+  }
+
+  function restart() {
+    clearInterval(timer);
+    timer = running() ? setInterval(() => goTo(current + 1), INTERVAL) : null;
+  }
+
+  function setPaused(paused) {
+    userPaused = paused;
+    carousel.classList.toggle("is-paused", paused);
+    pauseButton.setAttribute("aria-label", paused ? "Play the slideshow" : "Pause the slideshow");
+    restart();
+  }
+
+  // A swipe or scroll by hand: follow the slide it settles on and give it the full 8 seconds.
+  let settle = null;
+  track.addEventListener("scroll", () => {
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      if (moving && Math.abs(offset(current) - track.scrollLeft) > 2) return;
+      const i = slides.reduce((best, _, j) => (Math.abs(offset(j) - track.scrollLeft) < Math.abs(offset(best) - track.scrollLeft) ? j : best), 0);
+      if (i !== current) {
+        show(i);
+        restart();
+      }
+    }, 120);
+  });
+
+  carousel.querySelector(".carousel-prev").addEventListener("click", () => goTo(current - 1));
+  carousel.querySelector(".carousel-next").addEventListener("click", () => goTo(current + 1));
+  pauseButton.addEventListener("click", () => setPaused(!userPaused));
+  carousel.addEventListener("mouseenter", () => { hovered = true; restart(); });
+  carousel.addEventListener("mouseleave", () => { hovered = false; restart(); });
+  carousel.addEventListener("focusin", () => { focused = true; restart(); });
+  carousel.addEventListener("focusout", (e) => {
+    if (carousel.contains(e.relatedTarget)) return;
+    focused = false;
+    restart();
+  });
+  document.addEventListener("visibilitychange", restart);
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; restart(); }, { threshold: 0.4 }).observe(carousel);
+  } else {
+    onScreen = true;
+  }
+
+  carousel.classList.add("is-carousel");
+  controls.hidden = false;
+  show(0);
+  setPaused(userPaused);
+})();

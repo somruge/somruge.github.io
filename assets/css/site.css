@@ -537,7 +537,8 @@ main {
     border-radius: calc(var(--r-card) - 4px);
     border: 1px solid var(--border);
   }
-  #trip-planner .card-media img { aspect-ratio: 1200 / 630; }
+  #trip-planner .card-media img,
+  #pnotes .card-media img { aspect-ratio: 1200 / 630; }
   /* The title column comes first in reading order; the picture column is shown on the left. */
   .card-featured.has-media .card-side { grid-column: 1; grid-row: 1; }
   .card-featured.has-media .card-main { grid-column: 2; grid-row: 1; }
@@ -559,22 +560,69 @@ main {
   .card-media img { transition: none; }
   .card-media:hover img { transform: none; }
 }
-/* Compact card: a full-width strip — story on the left, stack and actions on the right. */
-.card-compact { grid-column: 1 / -1; }
-@media (min-width: 761px) {
-  .card-compact {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    column-gap: var(--s-6, 2rem);
-    align-items: center;
-  }
-  .card-compact .card-main > :last-child { margin-bottom: 0; }
-  .card-compact .card-side .actions { margin-top: 0; }
-}
 .card-note { margin-top: var(--s-3); color: var(--ink-muted); font-size: 0.9rem; }
 .card-badge { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); }
 .card-badge img { height: 28px; width: auto; max-width: 100%; }
 .card .actions { margin-top: var(--s-5); }
+
+/* Projects carousel (site.js adds .is-carousel): one project at a time, sliding every 8 seconds.
+   Without JavaScript the cards stay a stacked list. */
+.carousel.is-carousel .carousel-track {
+  position: relative; /* keeps visually hidden text in off-screen slides inside the scroll box */
+  display: flex;
+  gap: var(--s-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-bottom: 2px; /* room for the card border */
+}
+.carousel.is-carousel .carousel-track::-webkit-scrollbar { display: none; }
+.carousel.is-carousel .carousel-track > .card {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}
+.carousel-controls[hidden] { display: none; }
+.carousel-dots { display: flex; gap: var(--s-1); margin-right: auto; }
+.carousel-dots button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.carousel-dots button::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: auto;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+.carousel-dots button[aria-current="true"]::before {
+  width: 26px;
+  border-radius: 5px;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.carousel-pause .icon-play { display: none; }
+.carousel.is-paused .carousel-pause .icon-play { display: block; }
+.carousel.is-paused .carousel-pause .icon-pause { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .carousel.is-carousel .carousel-track { scroll-behavior: auto; }
+  .carousel-dots button::before { transition: none; }
+}
 
 .meta-label {
   margin: var(--s-4) 0 var(--s-1);

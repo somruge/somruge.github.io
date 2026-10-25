@@ -45,6 +45,40 @@ test("MahaPrabha Gurukul and Trip Planner are the featured projects, then PNotes
   await expect(cards.nth(2).getByRole("heading")).toContainText("PNotes");
 });
 
+test("projects carousel moves on after 8 seconds, by the arrows and dots, and can be paused", async ({ page }) => {
+  await page.clock.install();
+  await page.goto("/");
+  const carousel = page.locator("#projectsCarousel");
+  const dots = carousel.locator(".carousel-dots button");
+  await carousel.scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0); // keep the pointer off it, which would pause it
+  await expect(dots).toHaveCount(3);
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
+
+  await page.clock.runFor(8100);
+  await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
+  await expect(page.locator("#trip-planner")).toBeInViewport({ ratio: 0.9 });
+
+  await carousel.getByRole("button", { name: "Next project" }).click();
+  await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+  await carousel.getByRole("button", { name: "Next project" }).click();
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true"); // loops back to the first
+  await carousel.getByRole("button", { name: /Show project 3: PNotes/ }).click();
+  await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+
+  await carousel.getByRole("button", { name: "Pause the slideshow" }).click();
+  await page.mouse.move(0, 0);
+  await carousel.getByRole("button", { name: "Play the slideshow" }).blur();
+  await page.clock.runFor(20000);
+  await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+});
+
+test("projects carousel starts paused under reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.locator("#projectsCarousel").getByRole("button", { name: "Play the slideshow" })).toBeVisible();
+});
+
 test("MahaPrabha Gurukul card links to the live app and shows its ratings badge", async ({ page }) => {
   await page.goto("/");
   const card = page.locator("#mahaprabha-gurukul");
