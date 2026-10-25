@@ -96,3 +96,17 @@ document.querySelectorAll("details.case").forEach((d) => {
     }
   });
 });
+
+// Project ratings badges: hidden until the app has its first thank-you or rating (owner's choice),
+// so the card never shows "0 thank-yous". The count is public read-only JSON; on any error the
+// badge simply stays hidden.
+(function () {
+  document.querySelectorAll("img[data-appreciation]").forEach((img) => {
+    fetch(img.dataset.appreciation, { credentials: "omit", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((t) => {
+        if (t && (Number(t.thanks) > 0 || Number(t.ratings) > 0)) img.hidden = false;
+      })
+      .catch(() => {});
+  });
+})();
