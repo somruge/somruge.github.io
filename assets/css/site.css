@@ -58,6 +58,7 @@
   --max: 860px;
   --gutter: 1.5rem;
   --nav-h: 3.75rem;
+  --tabbar-h: 0px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -201,6 +202,8 @@ a:hover { color: var(--primary-hover); }
   text-decoration: none;
 }
 .nav-brand img { display: block; width: 40px; height: 32px; }
+.nav-brand .nav-avatar { display: none; }
+.nav-title { display: none; }
 
 .nav-links {
   display: flex;
@@ -245,7 +248,11 @@ a:hover { color: var(--primary-hover); }
   :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
 }
 
-.nav-toggle { display: none; }
+/* Play and Contact shortcuts: phones only; wider screens have them in the section links. */
+.nav-quick { display: none; }
+
+/* App-style tab bar: phones only (see the 760px breakpoint). */
+.tabbar { display: none; }
 
 /* Layout */
 
@@ -867,23 +874,92 @@ html:not(.js) .ask-panel { display: none; }
   .nav-links { gap: var(--s-4); }
 }
 
+/* Phones: LinkedIn-style app layout. The header carries the photo, name and the Play and Contact
+   shortcuts; the section links move to a tab bar fixed at the bottom. The footer (disclaimer,
+   credits & privacy) gets extra bottom padding the height of the bar, so it always ends above it. */
 @media (max-width: 760px) {
-  .nav-toggle { display: inline-grid; }
-  .nav-links {
-    position: absolute;
-    top: 100%;
+  :root { --tabbar-h: calc(3.75rem + env(safe-area-inset-bottom, 0px)); }
+  .tabbar ~ .footer { padding-bottom: calc(var(--s-6) + var(--tabbar-h)); }
+  html { scroll-padding-bottom: var(--tabbar-h); }
+
+  .nav-inner { gap: var(--s-1); }
+  .nav-links { display: none; }
+  .nav-brand { gap: var(--s-3); min-width: 0; }
+  .nav-avatar + picture { display: none; }
+  .nav-brand .nav-avatar {
+    display: block;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+  }
+  .nav-id { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
+  .nav-title {
+    display: block;
+    overflow: hidden;
+    color: var(--ink-muted);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .nav-quick { display: inline-grid; }
+  .nav-quick svg { width: 22px; height: 22px; }
+
+  .tabbar {
+    display: block;
+    position: fixed;
     left: 0;
     right: 0;
-    display: none;
-    flex-direction: column;
-    gap: 0;
-    padding: var(--s-2) var(--gutter) var(--s-4);
-    background: var(--paper);
-    border-bottom: 1px solid var(--border);
+    bottom: 0;
+    z-index: 10;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border);
   }
-  .nav-links.open { display: flex; }
-  .nav-links a { display: block; padding: var(--s-3) 0; }
-  .nav-links a.nav-ask { display: inline-block; margin-top: var(--s-2); padding: var(--s-2) var(--s-4); }
+  .tabbar ul {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+  .tabbar a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 3.75rem;
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .tabbar svg { width: 22px; height: 22px; }
+  @media (hover: hover) { .tabbar a:hover { color: var(--ink); } }
+  .tabbar a[aria-current="true"] { color: var(--primary); }
+  .tabbar a[aria-current="true"]::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--primary);
+  }
+}
+
+@media (max-width: 359px) {
+  .nav-title { display: none; }
+  .tabbar a { font-size: 0.7rem; }
 }
 
 @media (max-width: 639px) {
@@ -891,8 +967,11 @@ html:not(.js) .ask-panel { display: none; }
   body { font-size: 1rem; }
   .section { padding-top: var(--s-7); }
   .section:last-child { padding-bottom: var(--s-7); }
-  .hero { grid-template-columns: 1fr; gap: var(--s-5); padding: var(--s-7) 0 var(--s-5); }
-  .hero-photo { grid-column: 1; width: 120px; height: 120px; }
+  /* The tab bar takes the bottom of the first screen: a tighter hero keeps both hero actions above
+     it. The eyebrow repeats the title just below it and in the header. */
+  .hero { grid-template-columns: 1fr; gap: var(--s-4); padding: var(--s-5) 0 var(--s-5); }
+  .hero .eyebrow { display: none; }
+  .hero-photo { grid-column: 1; width: 104px; height: 104px; }
   .hero h1 { font-size: 2.25rem; }
   .hero-position { font-size: 1.15rem; }
   .section-head { font-size: 1.4rem; }

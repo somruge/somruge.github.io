@@ -24,27 +24,6 @@ if (themeToggle) {
   });
 }
 
-// Mobile menu
-const navToggle = document.getElementById("navToggle");
-const navLinks = document.getElementById("navLinks");
-
-function closeMenu({ focusToggle = false } = {}) {
-  navLinks.classList.remove("open");
-  navToggle.setAttribute("aria-expanded", "false");
-  if (focusToggle) navToggle.focus();
-}
-
-navToggle.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
-  navToggle.setAttribute("aria-expanded", String(open));
-});
-
-navLinks.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => closeMenu()));
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && navLinks.classList.contains("open")) closeMenu({ focusToggle: true });
-});
-
 // Reveal on scroll, only when motion is allowed (13 §7)
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (!reducedMotion && "IntersectionObserver" in window) {
@@ -67,18 +46,20 @@ if (!reducedMotion && "IntersectionObserver" in window) {
   });
 }
 
-// Active section in the nav
-const navAnchors = [...navLinks.querySelectorAll("a")];
-const tracked = navAnchors.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+// Active section in the header links and the phone tab bar. Every section is watched, so a section
+// with no link of its own (the hero, Play) clears the highlight. A link's data-also names another
+// section it stands for (the AI tab opens the assistant and also covers "How I use AI").
+const navAnchors = [...document.querySelectorAll(".nav-links a, .tabbar a")];
+const tracked = [...document.querySelectorAll("main > section[id]")];
 
 if ("IntersectionObserver" in window && tracked.length) {
   const navObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        const id = `#${entry.target.id}`;
+        const id = entry.target.id;
         navAnchors.forEach((a) => {
-          if (a.getAttribute("href") === id) a.setAttribute("aria-current", "true");
+          if (a.getAttribute("href") === `#${id}` || a.dataset.also === id) a.setAttribute("aria-current", "true");
           else a.removeAttribute("aria-current");
         });
       });

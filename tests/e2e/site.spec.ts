@@ -9,13 +9,17 @@ test.beforeEach(async ({ page }) => {
 for (const viewport of [
   { width: 1366, height: 768 },
   { width: 390, height: 844 },
+  { width: 390, height: 664 }, // iPhone 13 in Safari, with its toolbars
 ]) {
-  test(`AC-01: positioning and both hero actions visible without scrolling at ${viewport.width}px`, async ({ page }) => {
+  test(`AC-01: positioning and both hero actions visible without scrolling at ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
+    // On phones the tab bar covers the bottom of the screen, so "visible" means above it.
+    const tabbar = await page.locator(".tabbar").boundingBox();
+    const bottom = tabbar ? tabbar.y : viewport.height;
     const inView = async (locator) => {
       const box = await locator.boundingBox();
-      return box !== null && box.y >= 0 && box.y + box.height <= viewport.height;
+      return box !== null && box.y >= 0 && box.y + box.height <= bottom;
     };
     expect(await inView(page.locator(".hero-position"))).toBe(true);
     expect(await inView(page.getByRole("link", { name: "Get in touch" }))).toBe(true);
@@ -146,10 +150,10 @@ for (const scheme of ["light", "dark"] as const) {
 
 test("AC-22: animated turtle normally; only the still under reduced motion", async ({ page }) => {
   await page.goto("/");
-  expect(await page.locator(".nav-brand img").evaluate((img: HTMLImageElement) => img.currentSrc)).toContain("turtle.webp");
+  expect(await page.locator(".nav-brand picture img").evaluate((img: HTMLImageElement) => img.currentSrc)).toContain("turtle.webp");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  expect(await page.locator(".nav-brand img").evaluate((img: HTMLImageElement) => img.currentSrc)).toContain("turtle-still.webp");
+  expect(await page.locator(".nav-brand picture img").evaluate((img: HTMLImageElement) => img.currentSrc)).toContain("turtle-still.webp");
 });
 
 test("theme toggle switches and remembers the choice (FR-12)", async ({ page }) => {
@@ -162,15 +166,42 @@ test("theme toggle switches and remembers the choice (FR-12)", async ({ page }) 
   await expect(page.getByRole("button", { name: "Switch to light mode" })).toBeVisible();
 });
 
-test("mobile menu opens, closes on Escape and returns focus", async ({ page }) => {
+test("phones: header shortcuts and a tab bar replace the section links", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  const toggle = page.getByRole("button", { name: "Menu" });
-  await toggle.click();
-  await expect(page.getByRole("link", { name: "Experience" })).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(toggle).toHaveAttribute("aria-expanded", "false");
-  await expect(toggle).toBeFocused();
+  await expect(page.locator(".nav-links")).toBeHidden();
+  await expect(page.locator(".nav-avatar")).toBeVisible();
+  const tabbar = page.getByRole("navigation", { name: "Sections, tab bar" });
+  await expect(tabbar.getByRole("link")).toHaveText(["Work", "Experience", "Projects", "AI", "Certs"]);
+
+  await tabbar.getByRole("link", { name: "Projects" }).click();
+  await expect(page).toHaveURL(/#projects$/);
+  await expect(tabbar.getByRole("link", { name: "Projects" })).toHaveAttribute("aria-current", "true");
+
+  await page.getByRole("link", { name: "Play Balloon Pop" }).click();
+  await expect(page).toHaveURL(/#play$/);
+  await page.getByRole("link", { name: "Contact", exact: true }).click();
+  await expect(page).toHaveURL(/#contact$/);
+});
+
+test("phones: the footer ends above the tab bar", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  const tabbar = await page.locator(".tabbar").boundingBox();
+  for (const locator of [page.getByText("Views and figures are my own"), page.getByRole("link", { name: "Credits & privacy" })]) {
+    const box = await locator.boundingBox();
+    expect(box!.y + box!.height).toBeLessThanOrEqual(tabbar!.y);
+  }
+});
+
+test("wider screens keep the section links and no tab bar", async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/");
+  await expect(page.locator(".nav-links")).toBeVisible();
+  await expect(page.locator(".tabbar")).toBeHidden();
+  await expect(page.locator(".nav-quick").first()).toBeHidden();
+  await expect(page.locator(".nav-avatar")).toBeHidden();
 });
 
 test("no horizontal scroll at 320px (400% reflow)", async ({ page }) => {

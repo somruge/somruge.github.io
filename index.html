@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' gc.zgo.at https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://somruge-ask.somruge.workers.dev somruge.goatcounter.com https://mahaprabha-gurukul.pages.dev; img-src 'self' data: somruge.goatcounter.com https://mahaprabha-gurukul.pages.dev; style-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <title>Som Ruge — Product Management &amp; AI / Digital Transformation Leader</title>
 <meta name="description" content="Product and program leader with 20+ years delivering enterprise Agile transformations, now applying AI to how teams plan, decide, and ship.">
@@ -18,7 +18,7 @@
 
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css?v=aa6f2fef63">
+<link rel="stylesheet" href="assets/css/site.css?v=d3a7c841e0">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <script src="assets/js/theme.js?v=26881427f5"></script>
@@ -40,11 +40,12 @@
 <header class="nav">
   <div class="nav-inner">
     <a href="#top" class="nav-brand">
+      <img class="nav-avatar" src="assets/brand/som-240.webp" width="40" height="40" alt="" decoding="async">
       <picture>
         <source srcset="assets/brand/turtle-still.webp" media="(prefers-reduced-motion: reduce)">
         <img src="assets/brand/turtle.webp" width="40" height="32" alt="" fetchpriority="low" decoding="async">
       </picture>
-      Som Ruge
+      <span class="nav-id">Som Ruge<span class="nav-title">Product &amp; AI Transformation</span></span>
     </a>
     <nav aria-label="Sections">
       <ul class="nav-links" id="navLinks">
@@ -61,9 +62,12 @@
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
     </button>
-    <button class="icon-button nav-toggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
+    <a class="icon-button nav-quick" href="#play" aria-label="Play Balloon Pop">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="8" width="20" height="9" rx="4"/><line x1="6" y1="10.5" x2="6" y2="14.5"/><line x1="4" y1="12.5" x2="8" y2="12.5"/><circle cx="15" cy="11" r="1"/><circle cx="18" cy="14" r="1"/></svg>
+    </a>
+    <a class="icon-button nav-quick" href="#contact" aria-label="Contact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/><circle cx="8.5" cy="12" r=".6" fill="currentColor"/><circle cx="12.5" cy="12" r=".6" fill="currentColor"/><circle cx="16.5" cy="12" r=".6" fill="currentColor"/></svg>
+    </a>
   </div>
 </header>
 
@@ -518,12 +522,33 @@
   </section>
 </main>
 
+<!-- Phones: an app-style tab bar replaces the section links in the header. -->
+<nav class="tabbar" aria-label="Sections, tab bar">
+  <ul>
+    <li><a href="#work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="3" y1="13" x2="21" y2="13"/></svg>
+      Work</a></li>
+    <li><a href="#experience">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Experience</a></li>
+    <li><a href="#projects">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+      Projects</a></li>
+    <li><a href="#ask" data-also="ai">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8Z"/></svg>
+      AI</a></li>
+    <li><a href="#certifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></svg>
+      Certs</a></li>
+  </ul>
+</nav>
+
 <footer class="footer">
   <p>&copy; <span id="year">2026</span> Som Ruge · Views and figures are my own, not my employers'.</p>
   <p><a href="credits.html">Credits &amp; privacy</a></p>
 </footer>
 
-<script src="assets/js/site.js?v=36fe6925f2" defer></script>
+<script src="assets/js/site.js?v=5144afcf1b" defer></script>
 <script src="assets/js/ask.js?v=d89a118114" defer></script>
 <script src="assets/js/game.js?v=bcffe18735" defer></script>
 <script data-goatcounter="https://somruge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
