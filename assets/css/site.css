@@ -59,6 +59,20 @@
   --gutter: 1.5rem;
   --nav-h: 3.75rem;
   --tabbar-h: 0px;
+  /* Phone tab bar: lifted off the page so it reads as app chrome. */
+  --chrome: #ffffff;
+  --chrome-shadow: 0 -6px 18px rgb(0 0 0 / 0.12);
+  /* Phone icon colours: one hue per icon, each at least 3:1 against the bars. */
+  --c-work: #b26a00;
+  --c-experience: #2f63d1;
+  --c-projects: #12806f;
+  --c-ai-a: #7c3aed;
+  --c-ai-b: #d6336c;
+  --c-certs: #c2412d;
+  --c-play: #c2255c;
+  --c-contact: #16855a;
+  --c-moon: #4c51bf;
+  --c-sun: #d99a00;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,6 +91,18 @@
     --danger: #f2877e;
     --shadow-rest: none;
     --shadow-raised: none;
+    --chrome: #22343b;
+    --chrome-shadow: 0 -8px 22px rgb(0 0 0 / 0.55);
+    --c-work: #f2b84b;
+    --c-experience: #8fb0ff;
+    --c-projects: #5fd0c2;
+    --c-ai-a: #b79cff;
+    --c-ai-b: #ff8fb8;
+    --c-certs: #ff8c6e;
+    --c-play: #ff85ad;
+    --c-contact: #5ad08f;
+    --c-moon: #a5a9ff;
+    --c-sun: #f6c453;
   }
 }
 
@@ -95,6 +121,18 @@
   --danger: #f2877e;
   --shadow-rest: none;
   --shadow-raised: none;
+  --chrome: #22343b;
+  --chrome-shadow: 0 -8px 22px rgb(0 0 0 / 0.55);
+  --c-work: #f2b84b;
+  --c-experience: #8fb0ff;
+  --c-projects: #5fd0c2;
+  --c-ai-a: #b79cff;
+  --c-ai-b: #ff8fb8;
+  --c-certs: #ff8c6e;
+  --c-play: #ff85ad;
+  --c-contact: #5ad08f;
+  --c-moon: #a5a9ff;
+  --c-sun: #f6c453;
 }
 
 /* Base */
@@ -907,7 +945,7 @@ html:not(.js) .ask-panel { display: none; }
     text-overflow: ellipsis;
   }
   .nav-quick { display: inline-grid; }
-  .nav-quick svg { width: 22px; height: 22px; }
+  .nav-quick svg, .theme-toggle svg { width: 24px; height: 24px; }
 
   .tabbar {
     display: block;
@@ -917,9 +955,10 @@ html:not(.js) .ask-panel { display: none; }
     bottom: 0;
     z-index: 10;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: color-mix(in srgb, var(--paper) 94%, transparent);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid var(--border);
+    /* A solid surface, a firm top edge and a shadow: the bar reads as app chrome, not page content. */
+    background: var(--chrome);
+    border-top: 1px solid var(--border-strong);
+    box-shadow: var(--chrome-shadow);
   }
   .tabbar ul {
     display: grid;
@@ -937,24 +976,61 @@ html:not(.js) .ask-panel { display: none; }
     justify-content: center;
     gap: 2px;
     min-height: 3.75rem;
-    color: var(--ink-muted);
+    color: var(--ink);
     font-size: 0.75rem;
     font-weight: 600;
     text-decoration: none;
   }
-  .tabbar svg { width: 22px; height: 22px; }
+  .tabbar svg { width: 24px; height: 24px; padding: 3px 12px; box-sizing: content-box; border-radius: 999px; color: var(--tab-c); }
+  .tabbar .t-work { --tab-c: var(--c-work); }
+  .tabbar .t-experience { --tab-c: var(--c-experience); }
+  .tabbar .t-projects { --tab-c: var(--c-projects); }
+  .tabbar .t-ai { --tab-c: var(--c-ai-a); }
+  .tabbar .t-certs { --tab-c: var(--c-certs); }
+
+  /* Two-tone icons: a soft tint of the icon's colour, a crisp outline and one solid detail. */
+  .ico .duo { fill: color-mix(in srgb, currentColor 20%, transparent); }
+  .ico .solid { fill: currentColor; stroke: none; }
+  .ico .grad { fill: url(#tabAiGrad); stroke: url(#tabAiGrad); }
+  .ico .ai-a { stop-color: var(--c-ai-a); }
+  .ico .ai-b { stop-color: var(--c-ai-b); }
+  .q-play { color: var(--c-play); }
+  .q-contact { color: var(--c-contact); }
+  .theme-toggle .icon-moon { color: var(--c-moon); }
+  .theme-toggle .icon-sun { color: var(--c-sun); }
+  .theme-toggle .duo { fill: color-mix(in srgb, currentColor 22%, transparent); }
   @media (hover: hover) { .tabbar a:hover { color: var(--ink); } }
-  .tabbar a[aria-current="true"] { color: var(--primary); }
+  .tabbar a[aria-current="true"] { font-weight: 800; }
+  .tabbar a[aria-current="true"] svg { background: color-mix(in srgb, var(--tab-c) 16%, transparent); }
   .tabbar a[aria-current="true"]::before {
     content: "";
     position: absolute;
-    top: -1px;
-    left: 20%;
-    right: 20%;
+    top: 0;
+    left: 18%;
+    right: 18%;
     height: 3px;
     border-radius: 0 0 3px 3px;
-    background: var(--primary);
+    background: var(--tab-c);
   }
+}
+
+/* Phones: certificates become one row you swipe through. The row runs to the screen edges and the
+   next tile peeks in, which shows there is more; each tile snaps to the left margin. */
+@media (max-width: 760px) {
+  .certs {
+    display: flex;
+    gap: var(--s-3);
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 0 var(--gutter) var(--s-2);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .certs::-webkit-scrollbar { display: none; }
+  /* position: relative keeps each tile's visually hidden text inside the row, not off the page. */
+  .cert { position: relative; flex: 0 0 min(72%, 260px); scroll-snap-align: start; }
 }
 
 @media (max-width: 359px) {
@@ -967,15 +1043,19 @@ html:not(.js) .ask-panel { display: none; }
   body { font-size: 1rem; }
   .section { padding-top: var(--s-7); }
   .section:last-child { padding-bottom: var(--s-7); }
-  /* The tab bar takes the bottom of the first screen: a tighter hero keeps both hero actions above
-     it. The eyebrow repeats the title just below it and in the header. */
+  /* The whole hero fits the first screen above the tab bar: the photo and the eyebrow already
+     show in the header, and the two main actions sit side by side. */
   .hero { grid-template-columns: 1fr; gap: var(--s-4); padding: var(--s-5) 0 var(--s-5); }
   .hero .eyebrow { display: none; }
-  .hero-photo { grid-column: 1; width: 104px; height: 104px; }
+  .hero-photo { display: none; }
   .hero h1 { font-size: 2.25rem; }
   .hero-position { font-size: 1.15rem; }
   .section-head { font-size: 1.4rem; }
-  .hero .actions .btn { flex: 1 1 100%; }
+  .hero .actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .hero .actions .btn { padding-inline: var(--s-3); white-space: nowrap; }
+  .hero .actions .text-link { grid-column: 1 / -1; justify-self: start; }
+  /* A tab lands its section's heading just below the header, not after the section's top gap. */
+  .section { scroll-margin-top: calc(var(--s-4) - var(--s-7)); }
   .outcomes { grid-template-columns: repeat(2, 1fr); gap: var(--s-5) var(--s-4); }
   .cards { grid-template-columns: 1fr; }
   .outcome-num { font-size: 1.8rem; }

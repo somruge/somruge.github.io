@@ -184,6 +184,16 @@ test("phones: header shortcuts and a tab bar replace the section links", async (
   await expect(page).toHaveURL(/#contact$/);
 });
 
+test("phones: no hero photo; Get in touch and Résumé side by side", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/");
+  await expect(page.locator(".hero-photo")).toBeHidden();
+  const touch = await page.getByRole("link", { name: "Get in touch" }).boundingBox();
+  const resume = await page.getByRole("link", { name: /Résumé/ }).boundingBox();
+  expect(Math.abs(touch!.y - resume!.y)).toBeLessThan(1);
+  expect(touch!.height).toBeLessThan(50); // one line each, no wrapping
+});
+
 test("phones: the footer ends above the tab bar", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
@@ -193,6 +203,21 @@ test("phones: the footer ends above the tab bar", async ({ page }) => {
     const box = await locator.boundingBox();
     expect(box!.y + box!.height).toBeLessThanOrEqual(tabbar!.y);
   }
+});
+
+test("phones: certificates are one swipeable row; wider screens keep the grid", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const certs = page.locator(".certs");
+  const row = await certs.evaluate((el) => {
+    const tops = [...el.children].map((li) => Math.round(li.getBoundingClientRect().top));
+    return { oneRow: new Set(tops).size === 1, scrolls: el.scrollWidth > el.clientWidth };
+  });
+  expect(row).toEqual({ oneRow: true, scrolls: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await expect(certs).toHaveCSS("display", "grid");
 });
 
 test("wider screens keep the section links and no tab bar", async ({ page }) => {
