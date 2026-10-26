@@ -107,8 +107,7 @@ document.querySelectorAll("details.case").forEach((d) => {
 // Sliders: a row that moves on one item every 4 seconds and loops. It stops while the pointer or
 // keyboard focus is on it, while it is off screen, and when the visitor pauses it; under reduced
 // motion it starts paused. Swipe, the dots (and arrows, when there are any) move it by hand.
-// `active` limits the slider to when it applies (the certificates row only slides on phones).
-function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dotLabel, pauseLabels, active = () => true }) {
+function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dotLabel, pauseLabels }) {
   const INTERVAL = 4000;
   let current = 0;
   let userPaused = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -145,12 +144,15 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
   }
 
   function running() {
-    return active() && !userPaused && !hovered && !focused && onScreen && !document.hidden;
+    return !userPaused && !hovered && !focused && onScreen && !document.hidden;
   }
 
+  // With several items in view the last few can't scroll to the start, so once the row has reached
+  // its end the next step goes back to the first item.
+  const atEnd = () => track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
   function restart() {
     clearInterval(timer);
-    timer = running() ? setInterval(() => goTo(current + 1), INTERVAL) : null;
+    timer = running() ? setInterval(() => goTo(atEnd() ? 0 : current + 1), INTERVAL) : null;
   }
 
   function setPaused(paused) {
@@ -167,8 +169,7 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
     clearTimeout(settle);
     settle = setTimeout(() => {
       if (moving && Math.abs(offset(current) - track.scrollLeft) > 2) return;
-      const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
-      const i = atEnd ? slides.length - 1 : slides.reduce((best, _, j) => (Math.abs(offset(j) - track.scrollLeft) < Math.abs(offset(best) - track.scrollLeft) ? j : best), 0);
+      const i = atEnd() ? slides.length - 1 : slides.reduce((best, _, j) => (Math.abs(offset(j) - track.scrollLeft) < Math.abs(offset(best) - track.scrollLeft) ? j : best), 0);
       if (i !== current) {
         show(i);
         restart();
@@ -196,7 +197,6 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
 
   show(0);
   setPaused(userPaused);
-  return { restart };
 }
 
 // Projects carousel: one project at a time. Without JavaScript the cards stay a stacked list.
@@ -225,16 +225,14 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
   carousel.querySelector(".carousel-controls").hidden = false;
 })();
 
-// Certificates: on phones the tiles are one swipeable row (site.css); here it gets dots and a
-// pause button and moves on every 4 seconds, like the projects. Wider screens keep the grid, with
-// no controls and no movement.
+// Certificates: the tiles are one swipeable row (site.css), three in view on wider screens and one
+// on phones; here it gets dots and a pause button and moves on every 4 seconds, like the projects.
 (function () {
   const section = document.getElementById("certifications");
   const track = section && section.querySelector(".certs");
   const controls = section && section.querySelector(".cert-controls");
   if (!track || !controls) return;
-  const phone = window.matchMedia("(max-width: 760px)");
-  const slider = makeSlider({
+  makeSlider({
     root: section,
     track,
     slides: [...track.children],
@@ -242,9 +240,7 @@ function makeSlider({ root, track, slides, dotsBox, pauseButton, prev, next, dot
     pauseButton: controls.querySelector(".carousel-pause"),
     dotLabel: (slide, i) => `Show certificate ${i + 1}: ${slide.querySelector("h3 a").firstChild.textContent.trim()}`,
     pauseLabels: { pause: "Pause the certificates", play: "Play the certificates" },
-    active: () => phone.matches,
   });
   section.classList.add("carousel");
-  phone.addEventListener("change", slider.restart);
   controls.hidden = false;
 })();

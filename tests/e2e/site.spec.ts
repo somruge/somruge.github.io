@@ -23,11 +23,11 @@ for (const viewport of [
     };
     expect(await inView(page.locator(".hero-position"))).toBe(true);
     expect(await inView(page.getByRole("link", { name: "Get in touch" }))).toBe(true);
-    expect(await inView(page.getByRole("link", { name: /Résumé/ }))).toBe(true);
   });
 }
 
-test("the Résumé button downloads a real PDF", async ({ page, request }) => {
+// The Résumé button is hidden in index.html until resume.pdf is updated; un-skip this with it.
+test.skip("the Résumé button downloads a real PDF", async ({ page, request }) => {
   await page.goto("/");
   const href = await page.getByRole("link", { name: /Résumé/ }).getAttribute("href");
   const res = await request.get(`/${href}`);
@@ -185,13 +185,12 @@ test("phones: header shortcuts and a tab bar replace the section links", async (
   await expect(page).toHaveURL(/#contact$/);
 });
 
-test("phones: no hero photo; Get in touch and Résumé side by side", async ({ page }) => {
+test("phones: no hero photo; Get in touch on one line", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/");
   await expect(page.locator(".hero-photo")).toBeHidden();
+  await expect(page.getByRole("link", { name: /Résumé/ })).toHaveCount(0);
   const touch = await page.getByRole("link", { name: "Get in touch" }).boundingBox();
-  const resume = await page.getByRole("link", { name: /Résumé/ }).boundingBox();
-  expect(Math.abs(touch!.y - resume!.y)).toBeLessThan(1);
   expect(touch!.height).toBeLessThan(50); // one line each, no wrapping
 });
 
@@ -231,26 +230,47 @@ test("phones: certificates have dots and a pause button and move on every 4 seco
   const dots = section.locator(".carousel-dots button");
   await section.locator(".certs").scrollIntoViewIfNeeded();
   await page.mouse.move(0, 0);
-  await expect(dots).toHaveCount(7);
+  await expect(dots).toHaveCount(8);
   await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
   await expect(section.locator(".carousel-prev, .carousel-next")).toHaveCount(0);
 
   await page.clock.runFor(4100);
   await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
-  await section.getByRole("button", { name: /Show certificate 7: ITIL/ }).click();
-  await expect(dots.nth(6)).toHaveAttribute("aria-current", "true");
+  await section.getByRole("button", { name: /Show certificate 8: ITIL/ }).click();
+  await expect(dots.nth(7)).toHaveAttribute("aria-current", "true");
 
   await section.getByRole("button", { name: "Pause the certificates" }).click();
   await section.getByRole("button", { name: "Play the certificates" }).blur();
   await page.mouse.move(0, 0);
   await page.clock.runFor(20000);
-  await expect(dots.nth(6)).toHaveAttribute("aria-current", "true");
+  await expect(dots.nth(7)).toHaveAttribute("aria-current", "true");
 });
 
-test("wider screens: certificates stay a grid with no dots", async ({ page }) => {
+test("wider screens: three certificates in view, moving on every 4 seconds", async ({ page }) => {
+  await page.clock.install();
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/");
-  await expect(page.locator("#certifications .cert-controls")).toBeHidden();
+  const section = page.locator("#certifications");
+  const certs = section.locator(".certs");
+  const dots = section.locator(".carousel-dots button");
+  await certs.scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0);
+  await expect(section.locator(".cert-controls")).toBeVisible();
+  const inView = await certs.evaluate((el) => {
+    const box = el.getBoundingClientRect();
+    return [...el.children].filter((li) => { const r = li.getBoundingClientRect(); return r.left >= box.left - 1 && r.right <= box.right + 1; }).length;
+  });
+  expect(inView).toBe(3);
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
+  await page.clock.runFor(4100);
+  await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
+
+  // Once the last tile is in view the row goes back to the first.
+  await section.getByRole("button", { name: /Show certificate 8: ITIL/ }).click();
+  await page.mouse.move(0, 0);
+  await section.getByRole("button", { name: /Show certificate 8: ITIL/ }).blur();
+  await page.clock.runFor(4100);
+  await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
 });
 
 test("phones: the footer ends above the tab bar", async ({ page }) => {
@@ -264,7 +284,7 @@ test("phones: the footer ends above the tab bar", async ({ page }) => {
   }
 });
 
-test("phones: certificates are one swipeable row; wider screens keep the grid", async ({ page }) => {
+test("phones: certificates are one swipeable row", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   const certs = page.locator(".certs");
@@ -274,9 +294,6 @@ test("phones: certificates are one swipeable row; wider screens keep the grid", 
   });
   expect(row).toEqual({ oneRow: true, scrolls: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
-
-  await page.setViewportSize({ width: 1366, height: 768 });
-  await expect(certs).toHaveCSS("display", "grid");
 });
 
 test("wider screens keep the section links and no tab bar", async ({ page }) => {

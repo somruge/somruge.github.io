@@ -34,8 +34,10 @@ const decode = (s) =>
     .replace(/&copy;/g, "©");
 
 // Turns one section's HTML into plain text. Elements marked data-placeholder (owner content not
-// yet written, D-018) are dropped with everything inside them, as are SVGs and visually hidden text.
+// yet written, D-018) are dropped with everything inside them, as are SVGs, visually hidden text
+// and HTML comments.
 function sectionText(html) {
+  html = html.replace(/<!--[\s\S]*?-->/g, "");
   let out = "";
   let skipDepth = 0;
   const stack = [];

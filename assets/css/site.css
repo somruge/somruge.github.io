@@ -610,17 +610,28 @@ main {
 .card-badge img { height: 28px; width: auto; max-width: 100%; }
 .card .actions { margin-top: var(--s-5); }
 
-/* Certificates: small tiles, as many to a row as fit. The thumbnail repeats the title link,
-   so it is hidden from screen readers and the tab order. */
+/* Certificates: one row of tiles, three in view, that slides along (site.js). The thumbnail
+   repeats the title link, so it is hidden from screen readers and the tab order. */
 .certs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(200px, 40%), 1fr));
+  display: flex;
   gap: var(--s-3);
-  margin: 0 0 var(--s-5);
-  padding: 0;
+  margin: 0;
+  padding: 0 0 var(--s-2);
   list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
+.certs::-webkit-scrollbar { display: none; }
+.cert-controls { margin: var(--s-2) 0 var(--s-5); }
+@media (prefers-reduced-motion: reduce) { .certs { scroll-behavior: auto; } }
 .cert {
+  /* position: relative keeps each tile's visually hidden text inside the row, not off the page. */
+  position: relative;
+  flex: 0 0 calc((100% - 2 * var(--s-3)) / 3);
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   padding: var(--s-3);
@@ -670,9 +681,11 @@ main {
   margin-top: var(--s-4);
 }
 .carousel-controls[hidden] { display: none; }
-.carousel-dots { display: flex; gap: var(--s-1); margin-right: auto; }
+.carousel-dots { display: flex; gap: var(--s-1); min-width: 0; margin-right: auto; }
+/* Dots shrink towards 24px (WCAG's minimum target size) when there are too many for a narrow screen. */
 .carousel-dots button {
-  width: 32px;
+  flex: 0 1 32px;
+  min-width: 24px;
   height: 32px;
   padding: 0;
   background: none;
@@ -690,7 +703,7 @@ main {
   transition: width 0.3s ease, background-color 0.3s ease;
 }
 .carousel-dots button[aria-current="true"]::before {
-  width: 26px;
+  width: min(26px, 100%);
   border-radius: 5px;
   background: var(--primary);
   border-color: var(--primary);
@@ -1064,30 +1077,15 @@ html:not(.js) .ask-panel { display: none; }
   .card-featured.has-media:has(.card-note) .actions { margin-top: 0; }
 }
 
-/* Phones: certificates become one row you swipe through. The row runs to the screen edges and the
-   next tile peeks in, which shows there is more; each tile snaps to the left margin. */
+/* Phones: the certificate row runs to the screen edges with one tile in view and the next peeking
+   in, which shows there is more; each tile snaps to the left margin. */
 @media (max-width: 760px) {
   .certs {
-    display: flex;
-    gap: var(--s-3);
     margin-inline: calc(-1 * var(--gutter));
-    padding: 0 var(--gutter) var(--s-2);
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
+    padding-inline: var(--gutter);
     scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
   }
-  .certs::-webkit-scrollbar { display: none; }
-  .certs { scroll-behavior: smooth; margin-bottom: 0; }
-  .cert-controls { margin: var(--s-2) 0 var(--s-5); }
-  @media (prefers-reduced-motion: reduce) { .certs { scroll-behavior: auto; } }
-  /* position: relative keeps each tile's visually hidden text inside the row, not off the page. */
-  .cert { position: relative; flex: 0 0 min(72%, 260px); scroll-snap-align: start; }
-}
-/* The certificates' dots and pause button belong to the phone row only. */
-@media (min-width: 761px) {
-  .carousel-controls.cert-controls { display: none; }
+  .cert { flex: 0 0 min(72%, 260px); }
 }
 
 /* Phones: case-study cards read top to bottom — company and years as a small label, the title,

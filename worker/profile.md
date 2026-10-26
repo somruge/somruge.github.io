@@ -6,7 +6,7 @@ Som Ruge
 Product Management and AI / Digital Transformation Leader
 Durham, NC · 20+ years
 I turn strategy into delivered outcomes for global teams across the US, India, Australia, and Thailand, and I'm now applying AI to how teams plan, decide, and ship.
-Get in touch Résumé (PDF) LinkedIn
+Get in touch LinkedIn
 Or ask my AI assistant →
 
 ## outcomes
@@ -74,7 +74,7 @@ Test Lead, Wipro Technologies (2007–2009) · Senior Test Analyst, ANZ IT (2005
 
 ## projects
 Projects
-!-- Without JavaScript the projects stay a stacked list; site.js turns them into a carousel. --> MahaPrabha Gurukul — learn Bhagavad Gītā shlokas
+MahaPrabha Gurukul — learn Bhagavad Gītā shlokas
 A free app I built for families to learn Gītā shlokas a step at a time: hear a real recitation with each phrase lit up as it is sung, learn the sounds, chant and record, then remember with gentle memory games and spaced review.
 - React
 - TypeScript
@@ -119,7 +119,7 @@ Adopt it when it moves a delivery measure, the same way I've tracked predictabil
 Certifications & tools
 - Agentic AI Coding: From Specification to Deployment
 Indian Institute of Science (IISc), Centre for Continuing Education
-Sep 2026 – Oct 2026
+Oct 2026
 - Project Management Professional (PMP)
 Project Management Institute
 Apr 2013 – Apr 2028
@@ -134,6 +134,10 @@ Verify
 - Python Data Structures
 University of Michigan (Coursera)
 Jun 2026
+Verify
+- Programming for Everybody (Getting Started with Python)
+University of Michigan (Coursera)
+Jan 2024
 Verify
 - Generative AI for Leaders
 Vanderbilt University (Coursera)
