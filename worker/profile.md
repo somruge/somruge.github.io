@@ -117,6 +117,9 @@ Adopt it when it moves a delivery measure, the same way I've tracked predictabil
 
 ## certifications
 Certifications & tools
+- Agentic AI Coding: From Specification to Deployment
+Indian Institute of Science (IISc), Centre for Continuing Education
+Sep 2026 – Oct 2026
 - Project Management Professional (PMP)
 Project Management Institute
 Apr 2013 – Apr 2028

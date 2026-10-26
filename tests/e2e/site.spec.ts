@@ -231,20 +231,20 @@ test("phones: certificates have dots and a pause button and move on every 4 seco
   const dots = section.locator(".carousel-dots button");
   await section.locator(".certs").scrollIntoViewIfNeeded();
   await page.mouse.move(0, 0);
-  await expect(dots).toHaveCount(6);
+  await expect(dots).toHaveCount(7);
   await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
   await expect(section.locator(".carousel-prev, .carousel-next")).toHaveCount(0);
 
   await page.clock.runFor(4100);
   await expect(dots.nth(1)).toHaveAttribute("aria-current", "true");
-  await section.getByRole("button", { name: /Show certificate 6: ITIL/ }).click();
-  await expect(dots.nth(5)).toHaveAttribute("aria-current", "true");
+  await section.getByRole("button", { name: /Show certificate 7: ITIL/ }).click();
+  await expect(dots.nth(6)).toHaveAttribute("aria-current", "true");
 
   await section.getByRole("button", { name: "Pause the certificates" }).click();
   await section.getByRole("button", { name: "Play the certificates" }).blur();
   await page.mouse.move(0, 0);
   await page.clock.runFor(20000);
-  await expect(dots.nth(5)).toHaveAttribute("aria-current", "true");
+  await expect(dots.nth(6)).toHaveAttribute("aria-current", "true");
 });
 
 test("wider screens: certificates stay a grid with no dots", async ({ page }) => {
