@@ -87,16 +87,16 @@ test("MahaPrabha Gurukul card links to the live app and shows its ratings badge"
   await page.goto("/");
   const card = page.locator("#mahaprabha-gurukul");
   await expect(card.getByRole("heading")).toContainText("MahaPrabha Gurukul");
-  await expect(card.getByRole("link", { name: /Start learning/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.pages.dev/");
-  await expect(card.getByRole("link", { name: /How it's checked/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.pages.dev/about");
+  await expect(card.getByRole("link", { name: /Start learning/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.org/");
+  await expect(card.getByRole("link", { name: /How it's checked/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.org/about");
   const badge = card.locator("img[data-appreciation]");
-  await expect(badge).toHaveAttribute("src", "https://mahaprabha-gurukul.pages.dev/api/appreciation/badge.svg");
+  await expect(badge).toHaveAttribute("src", "https://mahaprabha-gurukul.org/api/appreciation/badge.svg");
 });
 
 test("the MahaPrabha ratings badge stays hidden until the first thank-you", async ({ page }) => {
   let summary = { ratings: 0, average: null, thanks: 0 };
-  await page.route("https://mahaprabha-gurukul.pages.dev/api/appreciation/summary", (r) => r.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify(summary) }));
-  await page.route("https://mahaprabha-gurukul.pages.dev/api/appreciation/badge.svg", (r) => r.fulfill({ status: 200, contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="28"><rect width="200" height="28" fill="#155e75"/></svg>' }));
+  await page.route("https://mahaprabha-gurukul.org/api/appreciation/summary", (r) => r.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify(summary) }));
+  await page.route("https://mahaprabha-gurukul.org/api/appreciation/badge.svg", (r) => r.fulfill({ status: 200, contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="28"><rect width="200" height="28" fill="#155e75"/></svg>' }));
   await page.goto("/");
   const badge = page.locator("#mahaprabha-gurukul img[data-appreciation]");
   await page.waitForTimeout(500);
