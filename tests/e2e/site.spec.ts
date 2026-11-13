@@ -36,17 +36,19 @@ test.skip("the Résumé button downloads a real PDF", async ({ page, request }) 
   expect((await res.body()).subarray(0, 5).toString()).toBe("%PDF-");
 });
 
-test("MahaPrabha Gurukul and Trip Planner are the featured projects, then PNotes", async ({ page }) => {
+test("MahaPrabha Gurukul and Trip Planner are the featured projects, then Timeless Tales and PNotes", async ({ page }) => {
   await page.goto("/");
   const cards = page.locator("#projects .card");
-  await expect(cards).toHaveCount(3);
+  await expect(cards).toHaveCount(4);
   await expect(cards.nth(0)).toHaveClass(/card-featured/);
   await expect(cards.nth(0).getByRole("heading")).toContainText("MahaPrabha Gurukul");
   await expect(cards.nth(1)).toHaveClass(/card-featured/);
   await expect(cards.nth(1).getByRole("heading")).toContainText("Som's Trip Planner");
   await expect(cards.nth(1).getByRole("link", { name: /Try the live demo/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/");
   await expect(cards.nth(1).getByRole("link", { name: /How it's built/ })).toHaveAttribute("href", "https://soms-trip-planner.somruge.workers.dev/about");
-  await expect(cards.nth(2).getByRole("heading")).toContainText("PNotes");
+  await expect(cards.nth(2).getByRole("heading")).toContainText("Timeless Tales");
+  await expect(cards.nth(2).getByRole("link", { name: /Watch the stories/ })).toHaveAttribute("href", "https://mahaprabha-gurukul.org/stories");
+  await expect(cards.nth(3).getByRole("heading")).toContainText("PNotes");
 });
 
 test("projects carousel moves on after 4 seconds, by the arrows and dots, and can be paused", async ({ page }) => {
@@ -56,7 +58,7 @@ test("projects carousel moves on after 4 seconds, by the arrows and dots, and ca
   const dots = carousel.locator(".carousel-dots button");
   await carousel.scrollIntoViewIfNeeded();
   await page.mouse.move(0, 0); // keep the pointer off it, which would pause it
-  await expect(dots).toHaveCount(3);
+  await expect(dots).toHaveCount(4);
   await expect(dots.nth(0)).toHaveAttribute("aria-current", "true");
 
   await page.clock.runFor(4100);
@@ -66,15 +68,17 @@ test("projects carousel moves on after 4 seconds, by the arrows and dots, and ca
   await carousel.getByRole("button", { name: "Next project" }).click();
   await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
   await carousel.getByRole("button", { name: "Next project" }).click();
+  await expect(dots.nth(3)).toHaveAttribute("aria-current", "true");
+  await carousel.getByRole("button", { name: "Next project" }).click();
   await expect(dots.nth(0)).toHaveAttribute("aria-current", "true"); // loops back to the first
-  await carousel.getByRole("button", { name: /Show project 3: PNotes/ }).click();
-  await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+  await carousel.getByRole("button", { name: /Show project 4: PNotes/ }).click();
+  await expect(dots.nth(3)).toHaveAttribute("aria-current", "true");
 
   await carousel.getByRole("button", { name: "Pause the slideshow" }).click();
   await page.mouse.move(0, 0);
   await carousel.getByRole("button", { name: "Play the slideshow" }).blur();
   await page.clock.runFor(20000);
-  await expect(dots.nth(2)).toHaveAttribute("aria-current", "true");
+  await expect(dots.nth(3)).toHaveAttribute("aria-current", "true");
 });
 
 test("projects carousel starts paused under reduced motion", async ({ page }) => {
