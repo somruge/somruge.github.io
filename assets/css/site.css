@@ -239,7 +239,7 @@ a:hover { color: var(--primary-hover); }
   font-weight: 800;
   text-decoration: none;
 }
-.nav-brand img { display: block; width: 40px; height: 32px; }
+.nav-brand img { display: block; width: 44px; height: 33px; object-fit: cover; border-radius: 9px; box-shadow: 0 1px 4px rgba(20, 60, 70, 0.25); }
 .nav-brand .nav-avatar { display: none; }
 .nav-title { display: none; }
 
