@@ -885,6 +885,7 @@ html:not(.js) .ask-panel { display: none; }
 .nav-links a.nav-ask:hover, .nav-links a.nav-ask[aria-current="true"] { background: var(--primary); color: var(--on-primary); }
 
 .hero-ask { margin: var(--s-4) 0 0; font-size: 0.95rem; font-weight: 600; }
+.hero-stories { margin-top: var(--s-2); }
 
 /* Contact */
 
