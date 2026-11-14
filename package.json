@@ -13,11 +13,11 @@
     "worker:dev": "wrangler dev -c worker/wrangler.jsonc --port 8787"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.13.0",
-    "@cloudflare/workers-types": "^5.20260925.1",
-    "@playwright/test": "1.63.0",
+    "@axe-core/playwright": "4.14.0",
+    "@cloudflare/workers-types": "^5.20261110.1",
+    "@playwright/test": "1.65.0",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.2",
-    "wrangler": "^4.140.0"
+    "vitest": "^5.1.0",
+    "wrangler": "^4.160.0"
   }
 }
